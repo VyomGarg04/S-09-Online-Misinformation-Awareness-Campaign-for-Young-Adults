@@ -5,7 +5,8 @@ class Settings(BaseSettings):
     app_name: str = "MediaShield"
     app_version: str = "0.1.0"
     debug: bool = False
-
+    database_url: str
+    
     class Config:
         env_file = ".env"
 
