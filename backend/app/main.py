@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 
 from app.api.router import api_router
+from app.core.config import settings
 
 app = FastAPI(
-    title="MediaShield API",
-    description="Backend API for the MediaShield platform.",
-    version="0.1.0",
+    title=settings.app_name,
+    version=settings.app_version,
+    description="Backend API for MediaShield",
 )
 
 app.include_router(api_router)
