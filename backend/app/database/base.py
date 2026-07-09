@@ -6,4 +6,4 @@ class Base(DeclarativeBase):
 
 
 # this is bellow the class base because first the user imports base then we import user here
-from app.database.models import User
+# from app.database.models import User
