@@ -1,92 +1,133 @@
 # 2026-07-07
 
 ## Objective
+Initialize the FastAPI backend and development environment.
 
-Initialize the MediaShield backend project and establish the development environment.
+## Completed
+- Set up FastAPI using `uv`.
+- Initialized the project structure.
+- Added API routers.
+- Created `core/config.py`.
+- Verified the development server.
 
-## Tasks Completed
+## Learned
+- `uv` for dependency management.
+- FastAPI project structure.
+- API routers.
+- Separation of configuration from application logic.
 
-- Set up the FastAPI backend project using `uv`.
-- Initialized the Python project with `pyproject.toml`.
-- Installed FastAPI and Uvicorn.
-- Created the initial project structure.
-- Organized API endpoints using routers.
-- Separated configuration into a dedicated `core/config.py` module.
-- Verified the FastAPI server was running successfully.
+## Challenges
+- VS Code was using the wrong Python interpreter.
 
-## Concepts Learned
+## Solution
+- Configured the correct virtual environment.
 
-### Python
+## Next
+- PostgreSQL
+- SQLAlchemy
+- Alembic
 
-- Modern dependency management using `uv`.
-- Project configuration with `pyproject.toml`.
-- Virtual environments and dependency isolation.
-
-### FastAPI
-
-- Application entry point (`main.py`).
-- API Routers.
-- Modular project structure.
-
-### Backend Architecture
-
-- Separation of concerns.
-- Why configuration should not be hardcoded.
-- Organizing code into maintainable modules.
-
-### Linux
-
-- Services and background processes.
-- Why backend applications rely on system services.
-
-## Problems Faced
-
-- Python packages were not initially detected by VS Code because the correct interpreter was not selected.
-- Learned how to activate and use the project's virtual environment.
-
-## Solutions
-
-- Configured VS Code to use the project's virtual environment.
-- Verified FastAPI installation by successfully running the development server.
-
-## Key Takeaways
-
-- Every backend project should begin with a clean, modular structure.
-- Configuration should be separated from application logic.
-- Dependency management is simpler and faster with `uv`.
-- Routers help keep API endpoints organized and maintainable.
-
-## Next Session Goals
-
-- Learn PostgreSQL.
-- Connect FastAPI with PostgreSQL.
-- Understand SQLAlchemy and ORM fundamentals.
-
-
-
+---
 
 # 2026-07-08
 
 ## Objective
-Set up SQLAlchemy and Alembic to connect FastAPI with PostgreSQL and create the first database model.
+Connect FastAPI with PostgreSQL using SQLAlchemy and Alembic.
 
-## Tasks Completed
+## Completed
+- Created the `User` model.
+- Added authentication-related fields.
+- Configured SQLAlchemy Base.
+- Integrated Alembic.
+- Generated and applied the initial migration.
 
-- Designed the initial `User` SQLAlchemy model.
-- Added fields:
-  - `id`
-  - `full_name`
-  - `email`
-  - `hashed_password`
-  - `is_active`
-  - `is_verified`
-- Learned why passwords are stored as hashes instead of plain text.
-- Learned why `email` should have a unique database constraint.
-- Learned the concept of soft deletion using `is_active`.
-- Created the SQLAlchemy `Base` class.
-- Configured Alembic to use `Base.metadata`.
-- Connected Alembic with the application's `.env` configuration.
-- Generated the initial migration for the `users` table.
-- Applied the migration using:
-  ```bash
-  uv run alembic upgrade head
+## Learned
+- ORM fundamentals.
+- Alembic migrations.
+- Password hashing concepts.
+- Database constraints.
+- Soft deletion using `is_active`.
+
+## Challenges
+- Configuring Alembic with the application settings.
+
+## Solution
+- Connected Alembic to the project's configuration and metadata.
+
+## Next
+- Repository layer.
+- Authentication service.
+
+---
+
+# 2026-07-09
+
+## Objective
+Build the repository and service layer for authentication.
+
+## Completed
+- Implemented `get_user_by_email()`.
+- Implemented `create_user()`.
+- Fixed `db.refresh()`.
+- Created the authentication service structure.
+- Added password hashing utilities.
+
+## Learned
+- Repository Pattern.
+- Database sessions.
+- Repository-Service-Route architecture.
+- Password hashing with bcrypt.
+- Library versions can affect application behavior.
+- Always verify dependency compatibility when integrating authentication libraries.
+
+## Challenges
+- Separating business logic from database logic.
+- Correct usage of `db.refresh()`.
+- Encountered a compatibility issue between `passlib` and `bcrypt` that caused password hashing to fail.
+
+## Solution
+- Moved persistence to the repository layer.
+- Kept business logic inside the service layer.
+- Downgraded `bcrypt` to a compatible version after identifying a version mismatch with `passlib`.
+
+## Next
+- Complete user registration.
+- Implement JWT authentication.
+- Protect API routes.
+
+
+# 2026-07-10 to 2026-07-12
+
+## Objective
+Implement JWT-based authentication for user login.
+
+## Completed
+- Added JWT configuration using environment variables.
+- Implemented JWT token generation.
+- Implemented JWT token decoding.
+- Added login request and token response schemas.
+- Implemented `login_user()` service.
+- Added `/auth/login` endpoint.
+- Verified password authentication using bcrypt.
+- Successfully tested JWT login using Swagger.
+
+## Learned
+- JWT structure (Header, Payload, Signature).
+- Stateless authentication.
+- Standard JWT claims (`sub`, `exp`).
+- Why secrets should be stored in environment variables.
+- Why authentication should return generic error messages.
+
+## Challenges
+- Faced compatibility issues between `passlib` and `bcrypt`.
+- Understanding how JWT differs from session-based authentication.
+
+## Solution
+- Used a compatible bcrypt version.
+- Configured JWT secrets using `.env`.
+- Implemented token generation and verification using `python-jose`.
+
+## Next
+- Build authentication dependencies.
+- Protect API endpoints.
+- Retrieve the currently logged-in user from the JWT.
