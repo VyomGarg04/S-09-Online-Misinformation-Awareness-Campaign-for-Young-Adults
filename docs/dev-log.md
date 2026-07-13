@@ -131,3 +131,22 @@ Implement JWT-based authentication for user login.
 - Build authentication dependencies.
 - Protect API endpoints.
 - Retrieve the currently logged-in user from the JWT.
+
+
+
+
+# 2026-07-13
+## Objective
+Implement OAuth2 bearer authentication for user login.
+
+## Completed
+- Added OAuth2 bearer authentication.
+- Implemented `get_current_user()` dependency.
+- Protected the `/auth/me` endpoint.
+- Tested JWT-protected endpoints.
+
+## Learned
+- FastAPI dependency injection for authentication.
+- Bearer token authentication.
+- How JWT identifies the current user.
+- Protected route implementation.
