@@ -1,7 +1,14 @@
-from sqlalchemy import String, Boolean
-from sqlalchemy.orm import Mapped, mapped_column
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.base import Base
+
+if TYPE_CHECKING:
+    from app.database.models.content import Content
 
 
 class User(Base):
@@ -22,3 +29,7 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(default=True)
 
     is_verified: Mapped[bool] = mapped_column(default=False)
+    
+    contents: Mapped[list[Content]] = relationship(
+        back_populates="owner",
+    )

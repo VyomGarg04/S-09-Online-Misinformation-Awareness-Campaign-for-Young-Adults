@@ -1,13 +1,22 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from datetime import datetime
+
 from sqlalchemy import (
     String,
     Text,
     Float,
     DateTime,
     Enum,
+    ForeignKey,
 )
+
 from sqlalchemy.orm import (
     Mapped,
     mapped_column,
+    relationship,
 )
 
 from app.database.base import Base
@@ -15,8 +24,9 @@ from app.database.enums import (
     ContentType,
     FactCheckStatus,
 )
-from datetime import datetime
-from typing import Optional
+
+if TYPE_CHECKING:
+    from app.database.models.user import User
 
 class Content(Base):
     __tablename__ = "contents"
@@ -55,4 +65,10 @@ class Content(Base):
         DateTime,
         default=datetime.now,
         onupdate=datetime.now,
+    )
+    owner_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id")
+    )
+    owner: Mapped["User"] = relationship(
+        back_populates="contents",
     )
