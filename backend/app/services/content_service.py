@@ -13,8 +13,9 @@ from app.schemas.content import (
     ContentUpdate,
 )
 
+from app.database.models.user import User
 
-def create_content(db: Session,content_data: ContentCreate) -> Content:
+def create_content(db: Session,content_data: ContentCreate,owner: User) -> Content:
     content = Content(
         title = content_data.title,
         content = content_data.content,
@@ -24,6 +25,7 @@ def create_content(db: Session,content_data: ContentCreate) -> Content:
         theme = content_data.theme,
         subtheme = content_data.subtheme,
         published_at = content_data.published_at,
+        owner_id=owner.id
     )
     return create_content_repo(db, content)
 

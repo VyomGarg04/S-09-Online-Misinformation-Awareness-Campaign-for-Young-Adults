@@ -13,6 +13,7 @@ from app.services.auth_service import (
     register_user,
     login_user,
 )
+from fastapi.security import OAuth2PasswordRequestForm
 
 router = APIRouter(
     prefix="/auth",
@@ -44,10 +45,15 @@ def register(
     response_model=Token,
 )
 def login(
-    user: UserLogin,
+    form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db),
 ):
     try:
+        user = UserLogin(
+            email=form_data.username,
+            password=form_data.password,
+        )
+
         return login_user(db, user)
 
     except ValueError as e:
