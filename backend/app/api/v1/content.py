@@ -77,7 +77,13 @@ def update_content_endpoint_service(
             status_code=404,
             detail = str(e)
         )
+    except PermissionError as e:
+        HTTPException(
+        status_code=403,
+        detail=str(e),
+    )
     
+
 @router.delete("/{content_id}")
 def delete_content_endpoint(
     content_id: int,
@@ -94,3 +100,8 @@ def delete_content_endpoint(
             status_code=404,
             detail=str(e),
         )
+    except PermissionError as e:
+        HTTPException(
+        status_code=403,
+        detail=str(e),
+    )

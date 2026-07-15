@@ -45,7 +45,8 @@ def list_content(db: Session) -> list[Content]:
 def update_content(
         db: Session,
         content_id: int,
-        content_data: ContentUpdate
+        content_data: ContentUpdate,
+        current_user: User,
     ) -> Content:
     content = get_content(db, content_id)
     if not content:
@@ -53,15 +54,20 @@ def update_content(
     updates = content_data.model_dump(exclude_unset=True)
     for field, value in updates.items():
         setattr(content, field, value)
+    if content.owner_id != current_user.id:
+        raise PermissionError("You are not allowed to update this content.")
     return update_content_repo(db, content)
 
 
 def delete_content(
         db: Session,
         content_id: int,
+        current_user: User,
     ) -> None:
     content = get_content(db, content_id)
 
     if not content:
         raise ValueError("Content not found")
+    if content.owner_id != current_user.id:
+        raise PermissionError("You are not allowed to delete this content.")
     delete_content_repo(db, content)
