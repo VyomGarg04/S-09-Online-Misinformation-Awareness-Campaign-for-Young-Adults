@@ -41,10 +41,15 @@ def create_content_endpoint(
 
 @router.get("/", response_model=list[ContentResponse])
 def list_content_endpoint(
+    page: int = 1,
+    page_size: int = 10,
     db: Session = Depends(get_db),
 ):
-    return list_content_service(db)
-
+    return list_content_service(
+        db,
+        page,
+        page_size,
+    )
 
 @router.get("/{content_id}", response_model=ContentResponse)
 def get_content_endpoint(
@@ -71,6 +76,7 @@ def update_content_endpoint_service(
             db,
             content_id,
             content_data,
+            current_user,
         )
     except ValueError as e:
         raise HTTPException(
@@ -78,7 +84,7 @@ def update_content_endpoint_service(
             detail = str(e)
         )
     except PermissionError as e:
-        HTTPException(
+        raise HTTPException(
         status_code=403,
         detail=str(e),
     )
@@ -91,7 +97,11 @@ def delete_content_endpoint(
     current_user: User = Depends(get_current_user),
 ):
     try:
-        delete_content_service(db, content_id)
+        delete_content_service(
+            db,
+            content_id,
+            current_user,
+        )
         return {
             "message": "Content deleted successfully"
         }
@@ -101,7 +111,7 @@ def delete_content_endpoint(
             detail=str(e),
         )
     except PermissionError as e:
-        HTTPException(
+        raise HTTPException(
         status_code=403,
         detail=str(e),
     )

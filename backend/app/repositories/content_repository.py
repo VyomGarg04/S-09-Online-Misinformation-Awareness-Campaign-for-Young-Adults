@@ -13,8 +13,17 @@ def get_content_by_id(db: Session, content_id: int) -> Content | None:
     stmt = select(Content).where(Content.id == content_id)
     return db.execute(stmt).scalar_one_or_none()
 
-def get_all_content(db: Session) -> list[Content]:
-    stmt = select(Content)
+def get_all_content(
+        db: Session,
+        page: int,
+        page_size: int,
+    ) -> list[Content]:
+    offset = (page - 1) * page_size
+    stmt = (
+        select(Content)
+        .offset(offset)
+        .limit(page_size)
+    )
     return db.execute(stmt).scalars().all()
 
 def update_content(db: Session, content: Content) -> Content:

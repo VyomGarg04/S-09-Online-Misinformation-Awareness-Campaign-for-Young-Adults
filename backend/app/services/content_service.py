@@ -38,8 +38,16 @@ def get_content(db: Session, content_id: int) -> Content:
     return content
 
 
-def list_content(db: Session) -> list[Content]:
-    return get_all_content(db)
+def list_content(
+        db: Session,
+        page: int,
+        page_size: int,
+    ) -> list[Content]:
+        return get_all_content(
+            db,
+            page,
+            page_size,
+        )
 
 
 def update_content(
