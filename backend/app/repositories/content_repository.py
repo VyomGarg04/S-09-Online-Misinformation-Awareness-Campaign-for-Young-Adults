@@ -1,11 +1,14 @@
 from sqlalchemy.orm import Session
 
 from app.database.models.content import Content
-from sqlalchemy import select
+from sqlalchemy import select, func
 from app.database.enums import (
     ContentType,
     FactCheckStatus,
 )
+
+
+
 def create_content(db: Session, content: Content) -> Content:
     db.add(content)
     db.commit()
@@ -59,3 +62,27 @@ def update_content(db: Session, content: Content) -> Content:
 def delete_content(db: Session, content: Content) -> None:
     db.delete(content)
     db.commit()
+
+
+    from sqlalchemy import select, func
+
+def get_content_statistics(db: Session):
+    total = db.scalar(
+        select(func.count(Content.id))
+    )
+
+    stmt = (
+        select(
+            Content.fact_check_status,
+            func.count(Content.id),
+        )
+        .group_by(Content.fact_check_status)
+    )
+
+    stats = db.execute(stmt).all()
+    
+    return total, stats
+
+
+    def get_dashboard_statistics(db: Session):
+        return get_content_statistics(db)

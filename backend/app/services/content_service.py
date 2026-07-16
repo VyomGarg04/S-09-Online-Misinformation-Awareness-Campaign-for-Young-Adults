@@ -7,6 +7,7 @@ from app.repositories.content_repository import (
     get_all_content,
     update_content as update_content_repo,
     delete_content as delete_content_repo,
+    get_content_statistics as get_content_statistics_repo
 )
 from app.schemas.content import (
     ContentCreate,
@@ -90,3 +91,22 @@ def delete_content(
     if content.owner_id != current_user.id:
         raise PermissionError("You are not allowed to delete this content.")
     delete_content_repo(db, content)
+
+
+def get_dashboard_statistics(db: Session) -> dict:
+    total, stats = get_content_statistics_repo(db)
+
+    response = {
+        "total_content": total,
+        "pending": 0,
+        "verified": 0,
+        "misleading": 0,
+        "false": 0,
+    }
+
+    for status, count in stats:
+        key = status.value.lower()
+        if key in response:
+            response[key] = count
+
+    return response
