@@ -10,5 +10,8 @@ client = genai.GenerativeModel("gemini-1.5-flash")
 
 def analyze(claim: str) -> str:
     full_prompt = f"{FACT_CHECKER_PROMPT}\n\nClaim: {claim}"
-    response = client.generate_content(full_prompt)
-    return response.text
+    try:
+        response = client.generate_content(full_prompt)
+        return response.text
+    except Exception as e:
+        raise RuntimeError(f"Gemini analysis failed: {e}")
