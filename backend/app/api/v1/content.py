@@ -18,7 +18,10 @@ from app.services.content_service import (
     update_content as update_content_service,
     delete_content as delete_content_service,
 )
-
+from app.database.enums import (
+    ContentType,
+    FactCheckStatus,
+)
 router = APIRouter(prefix="/content", tags=["Content"])
 
 @router.post("/", response_model=ContentResponse)
@@ -43,6 +46,10 @@ def create_content_endpoint(
 def list_content_endpoint(
     page: int = 1,
     page_size: int = 10,
+    theme: str | None = None,
+    content_type: ContentType | None = None,
+    status: FactCheckStatus | None = None,
+    search: str | None = None,
     db: Session = Depends(get_db),
 ):
     return list_content_service(

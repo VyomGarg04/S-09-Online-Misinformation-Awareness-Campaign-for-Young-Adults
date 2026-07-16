@@ -42,6 +42,10 @@ def list_content(
         db: Session,
         page: int,
         page_size: int,
+        theme: str | None = None,
+        content_type: ContentType | None = None,
+        status: FactCheckStatus | None = None,
+        search: str | None = None,
     ) -> list[Content]:
         return get_all_content(
             db,
