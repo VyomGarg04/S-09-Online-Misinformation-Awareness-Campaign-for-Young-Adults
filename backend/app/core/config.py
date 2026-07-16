@@ -5,12 +5,16 @@ class Settings(BaseSettings):
     app_name: str = "MediaShield"
     app_version: str = "0.1.0"
     debug: bool = False
+
     database_url: str
 
     secret_key: str
     algorithm: str = "HS256"
+
     access_token_expire_minutes: int = 30
 
+    gemini_api_key: str 
+    
     model_config = SettingsConfigDict(
         env_file=".env",
         extra="ignore",
