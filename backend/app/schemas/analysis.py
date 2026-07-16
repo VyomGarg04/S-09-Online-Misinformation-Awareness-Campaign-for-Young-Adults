@@ -1,7 +1,7 @@
-from enum import Enum
+from app.database.enums import FactCheckStatus
 from pydantic import BaseModel
 
-class FactCheckStatus(str, Enum):
+class FactCheckStatus(str):
     TRUE = "true"
     FALSE = "false"
     MIXED = "mixed"
