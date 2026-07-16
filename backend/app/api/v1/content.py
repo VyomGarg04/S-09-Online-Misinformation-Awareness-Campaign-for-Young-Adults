@@ -76,6 +76,12 @@ def get_dashboard_statistics_endpoint(
 ):
     return get_dashboard_statistics_service(db)
 
+@router.get("/themes")
+def get_theme_statistics_endpoint(
+    db: Session = Depends(get_db),
+):
+    return get_theme_statistics_service(db)
+
 @router.get("/{content_id}", response_model=ContentResponse)
 def get_content_endpoint(
     content_id: int,
