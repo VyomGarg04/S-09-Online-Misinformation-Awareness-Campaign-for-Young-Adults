@@ -74,14 +74,3 @@ class Content(Base):
     owner: Mapped["User"] = relationship(
         back_populates="contents",
     )
-
-class DashboardStatistics(BaseModel):
-    total_content: int
-    pending: int
-    verified: int
-    misleading: int
-    false: int
-
-class ThemeStatistic(BaseModel):
-    theme: str
-    count: int
