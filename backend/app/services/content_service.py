@@ -7,7 +7,8 @@ from app.repositories.content_repository import (
     get_all_content,
     update_content as update_content_repo,
     delete_content as delete_content_repo,
-    get_content_statistics as get_content_statistics_repo
+    get_content_statistics as get_content_statistics_repo,
+    get_theme_statistics as get_theme_statistics_repo 
 )
 from app.schemas.content import (
     ContentCreate,
@@ -109,4 +110,16 @@ def get_dashboard_statistics(db: Session) -> dict:
         if key in response:
             response[key] = count
 
+    return response
+
+def get_theme_statistics(db: Session, ) -> dict:
+    stats = get_theme_statistics_repo(db)
+    response = []
+    for theme, count in stats:
+        response.append(
+            {
+                "theme" : theme,
+                "count" : stats
+            }
+        )
     return response

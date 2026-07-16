@@ -18,6 +18,7 @@ from app.services.content_service import (
     update_content as update_content_service,
     delete_content as delete_content_service,
     get_dashboard_statistics as get_dashboard_statistics_service,
+    get_theme_statistics as get_theme_statistics_service,
 )
 from app.database.enums import (
     ContentType,
