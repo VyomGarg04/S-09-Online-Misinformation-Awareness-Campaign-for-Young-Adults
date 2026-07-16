@@ -1,3 +1,4 @@
+from prompts import FACT_CHECKER_PROMPT
 import google.generativeai as genai
 
 from app.core.config import settings
@@ -7,7 +8,7 @@ genai.configure(api_key = API_KEY)
 
 client = genai.GenerativeModel("gemini-1.5-flash")
 
-def analyze(prompt: str) -> str:
-#    send prompt
-    response = client.generate_content(prompt)
+def analyze(claim: str) -> str:
+    full_prompt = f"{FACT_CHECKER_PROMPT}\n\nClaim: {claim}"
+    response = client.generate_content(full_prompt)
     return response.text
