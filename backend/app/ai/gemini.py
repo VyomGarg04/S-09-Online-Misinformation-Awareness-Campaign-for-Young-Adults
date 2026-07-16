@@ -1,4 +1,4 @@
-from prompts import FACT_CHECKER_PROMPT
+from app.ai.prompts import FACT_CHECKER_PROMPT
 import google.generativeai as genai
 
 from app.core.config import settings
