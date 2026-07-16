@@ -10,7 +10,7 @@ Your role:
 
 {
   "credibility_score": "<number between 0 and 100>",
-  "fact_check_status": "<one of: VERIFIED, PARTIALLY_TRUE, FALSE, UNVERIFIABLE>",
+  "fact_check_status": "<one of: PENDING, VERIFIED, MISLEADING, FALSE>",
   "explanation": "<concise reasoning in plain text>"
 }
 
