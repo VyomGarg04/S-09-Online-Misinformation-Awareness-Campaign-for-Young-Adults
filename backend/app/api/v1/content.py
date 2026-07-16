@@ -17,6 +17,7 @@ from app.services.content_service import (
     list_content as list_content_service,
     update_content as update_content_service,
     delete_content as delete_content_service,
+    get_dashboard_statistics as get_dashboard_statistics_service,
 )
 from app.database.enums import (
     ContentType,
@@ -62,6 +63,12 @@ def list_content_endpoint(
         search,
     )
 
+@router.get("/stats")
+def get_dashboard_statistics_endpoint(
+    db: Session = Depends(get_db),
+):
+    return get_dashboard_statistics_service(db)
+
 @router.get("/{content_id}", response_model=ContentResponse)
 def get_content_endpoint(
     content_id: int,
@@ -99,7 +106,6 @@ def update_content_endpoint_service(
         status_code=403,
         detail=str(e),
     )
-    
 
 @router.delete("/{content_id}")
 def delete_content_endpoint(
@@ -126,3 +132,4 @@ def delete_content_endpoint(
         status_code=403,
         detail=str(e),
     )
+
