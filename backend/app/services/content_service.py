@@ -12,7 +12,10 @@ from app.schemas.content import (
     ContentCreate,
     ContentUpdate,
 )
-
+from app.database.enums import (
+    ContentType,
+    FactCheckStatus,
+)
 from app.database.models.user import User
 
 def create_content(db: Session,content_data: ContentCreate,owner: User) -> Content:

@@ -56,6 +56,10 @@ def list_content_endpoint(
         db,
         page,
         page_size,
+        theme,
+        content_type,
+        status,
+        search,
     )
 
 @router.get("/{content_id}", response_model=ContentResponse)
