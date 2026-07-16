@@ -24,6 +24,8 @@ from app.database.enums import (
     ContentType,
     FactCheckStatus,
 )
+from app.schemas.content import ThemeStatistic
+
 router = APIRouter(prefix="/content", tags=["Content"])
 
 
@@ -76,7 +78,7 @@ def get_dashboard_statistics_endpoint(
 ):
     return get_dashboard_statistics_service(db)
 
-@router.get("/themes")
+@router.get("/themes", response_model=list[ThemeStatistic],)
 def get_theme_statistics_endpoint(
     db: Session = Depends(get_db),
 ):

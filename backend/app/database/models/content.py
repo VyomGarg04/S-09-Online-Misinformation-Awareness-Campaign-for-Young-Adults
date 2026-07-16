@@ -24,6 +24,8 @@ from app.database.enums import (
     ContentType,
     FactCheckStatus,
 )
+from pydantic import BaseModel
+
 
 if TYPE_CHECKING:
     from app.database.models.user import User
@@ -72,3 +74,7 @@ class Content(Base):
     owner: Mapped["User"] = relationship(
         back_populates="contents",
     )
+
+class ThemeStatistic(BaseModel):
+    theme: str
+    count: int
