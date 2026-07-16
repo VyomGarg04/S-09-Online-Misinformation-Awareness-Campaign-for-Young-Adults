@@ -25,6 +25,8 @@ from app.database.enums import (
 )
 router = APIRouter(prefix="/content", tags=["Content"])
 
+
+
 @router.post("/", response_model=ContentResponse)
 def create_content_endpoint(
     content_data: ContentCreate,
@@ -42,6 +44,10 @@ def create_content_endpoint(
             status_code=400,
             detail=str(e),
         )
+    
+
+
+
 
 @router.get("/", response_model=list[ContentResponse])
 def list_content_endpoint(
@@ -82,6 +88,11 @@ def get_content_endpoint(
             detail=str(e),
         )
     
+
+
+
+
+
 @router.put("/{content_id}", response_model=ContentResponse)
 def update_content_endpoint_service(
     content_id: int,
@@ -106,6 +117,10 @@ def update_content_endpoint_service(
         status_code=403,
         detail=str(e),
     )
+
+
+
+
 
 @router.delete("/{content_id}")
 def delete_content_endpoint(

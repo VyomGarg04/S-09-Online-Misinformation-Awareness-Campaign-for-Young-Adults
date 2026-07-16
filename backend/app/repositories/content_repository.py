@@ -80,9 +80,21 @@ def get_content_statistics(db: Session):
     )
 
     stats = db.execute(stmt).all()
-    
+
     return total, stats
 
 
-    def get_dashboard_statistics(db: Session):
-        return get_content_statistics(db)
+def get_dashboard_statistics(db: Session):
+    return get_content_statistics(db)
+
+
+def get_theme_statistics(db: Session):
+    stmt = (
+        select(
+        Content.theme,
+        func.count(Content.id),
+    )
+    .group_by(Content.theme)
+    .order_by(func.count(Content.id).desc())
+    )
+    return db.execute(stmt).all()
