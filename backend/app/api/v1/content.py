@@ -24,7 +24,7 @@ from app.database.enums import (
     ContentType,
     FactCheckStatus,
 )
-from app.schemas.content import ThemeStatistic
+from app.schemas.content import ThemeStatistic, DashboardStatistics
 
 router = APIRouter(prefix="/content", tags=["Content"])
 
@@ -72,7 +72,7 @@ def list_content_endpoint(
         search,
     )
 
-@router.get("/stats")
+@router.get("/stats",response_model=list[DashboardStatistics],)
 def get_dashboard_statistics_endpoint(
     db: Session = Depends(get_db),
 ):
