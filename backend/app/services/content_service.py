@@ -54,6 +54,10 @@ def list_content(
             db,
             page,
             page_size,
+            theme,
+            content_type,
+            status,
+            search,
         )
 
 
