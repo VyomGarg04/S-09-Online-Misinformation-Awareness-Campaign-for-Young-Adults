@@ -1,17 +1,21 @@
-from app.ai.prompts import FACT_CHECKER_PROMPT
-import google.generativeai as genai
+from google import genai
 
+from app.ai.prompts import FACT_CHECKER_PROMPT
 from app.core.config import settings
 
-API_KEY = settings.gemini_api_key
-genai.configure(api_key = API_KEY)
+client = genai.Client(api_key=settings.gemini_api_key)
 
-client = genai.GenerativeModel("gemini-1.5-flash")
 
 def analyze(claim: str) -> str:
-    full_prompt = f"{FACT_CHECKER_PROMPT}\n\nClaim: {claim}"
+    full_prompt = f"{FACT_CHECKER_PROMPT}\n\nClaim:\n{claim}"
+
     try:
-        response = client.generate_content(full_prompt)
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=full_prompt,
+        )
+        print(response.text)
         return response.text
+
     except Exception as e:
         raise RuntimeError(f"Gemini analysis failed: {e}")

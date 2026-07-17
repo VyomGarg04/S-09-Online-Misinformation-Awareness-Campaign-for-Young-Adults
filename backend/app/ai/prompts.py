@@ -1,5 +1,3 @@
-# prompts.py
-
 FACT_CHECKER_PROMPT = """
 You are Media-Shield, a professional fact-checking assistant.
 
