@@ -15,3 +15,4 @@ class FactCheckStatus(str, Enum):
     VERIFIED = "VERIFIED"
     MISLEADING = "MISLEADING"
     FALSE = "FALSE"
+    UNVERIFIABLE = "unverifiable"

@@ -8,7 +8,7 @@ Your role:
 
 {
   "credibility_score": "<floating number between 0 and 100>",
-  "fact_check_status": "<one of: PENDING, VERIFIED, MISLEADING, FALSE>",
+  "fact_check_status": "<one of: PENDING, VERIFIED, MISLEADING, FALSE, UNVERIFIABLE>",
   "explanation": "<concise reasoning in plain text>"
 }
 
