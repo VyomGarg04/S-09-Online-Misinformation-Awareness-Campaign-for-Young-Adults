@@ -26,6 +26,7 @@ from app.database.enums import (
 )
 from pydantic import BaseModel
 
+from sqlalchemy import Text
 
 if TYPE_CHECKING:
     from app.database.models.user import User
@@ -61,6 +62,10 @@ class Content(Base):
     )
     credibility_score: Mapped[float | None] = mapped_column(
         Float,
+        nullable=True,
+    )
+    analysis_summary = mapped_column(
+        Text,
         nullable=True,
     )
     updated_at: Mapped[datetime] = mapped_column(
