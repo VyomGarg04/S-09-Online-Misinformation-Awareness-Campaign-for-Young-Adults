@@ -17,4 +17,11 @@ def analyze_content(
     ai_response = analyze(content.content)
     analysis = parse_analysis_response(ai_response)
 
+    content.credibility_score = analysis.credibility_score
+    content.fact_check_status = analysis.fact_check_status
+    content.analysis_summary = analysis.explanation
+
+    db.commit()
+    db.refresh(content)
+
     return analysis
