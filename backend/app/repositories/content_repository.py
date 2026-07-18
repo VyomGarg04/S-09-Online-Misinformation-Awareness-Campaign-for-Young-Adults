@@ -6,7 +6,8 @@ from app.database.enums import (
     ContentType,
     FactCheckStatus,
 )
-
+from app.database.enums import FactCheckStatus
+from app.database.models.content import Content
 
 
 def create_content(db: Session, content: Content) -> Content:
@@ -65,6 +66,24 @@ def delete_content(db: Session, content: Content) -> None:
 
 
     from sqlalchemy import select, func
+
+
+def update_content_analysis(
+    db: Session,
+    content: Content,
+    credibility_score: float,
+    fact_check_status: FactCheckStatus,
+    analysis_summary: str,
+) -> Content:
+    content.credibility_score = credibility_score
+    content.fact_check_status = fact_check_status
+    content.analysis_summary = analysis_summary
+
+    db.commit()
+    db.refresh(content)
+
+    return content
+
 
 def get_content_statistics(db: Session):
     total = db.scalar(
