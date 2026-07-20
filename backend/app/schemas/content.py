@@ -30,7 +30,8 @@ class ContentResponse(BaseModel):
     updated_at: datetime
     credibility_score: float | None
     fact_check_status: FactCheckStatus
-
+    analysis_summary: str | None
+    
     model_config = ConfigDict(from_attributes=True)
 
 class ContentUpdate(BaseModel):
