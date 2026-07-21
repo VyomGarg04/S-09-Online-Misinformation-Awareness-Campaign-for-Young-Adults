@@ -7,7 +7,7 @@ from app.repositories.content_repository import (
     update_content_analysis,
 )
 from app.schemas.analysis import AnalysisResponse
-
+from app.database.enums import FactCheckStatus
 
 def analyze_content(
     db: Session,
@@ -17,6 +17,16 @@ def analyze_content(
 
     if content is None:
         raise ValueError("Content not found")
+
+    if (
+        content.fact_check_status != FactCheckStatus.PENDING
+        and content.analysis_summary is not None
+    ):
+        return AnalysisResponse(
+            credibility_score=content.credibility_score,
+            fact_check_status=content.fact_check_status,
+            explanation=content.analysis_summary,
+        )
 
     ai_response = analyze(content.content)
     analysis = parse_analysis_response(ai_response)
