@@ -54,6 +54,11 @@ def get_all_content(
     return db.execute(stmt).scalars().all()
 
 def update_content(db: Session, content: Content) -> Content:
+    content.credibility_score = None
+    content.fact_check_status = FactCheckStatus.PENDING
+    content.analysis_summary = None
+    content.analyzed_at = None
+    
     db.commit()
     db.refresh(content)
     return content
