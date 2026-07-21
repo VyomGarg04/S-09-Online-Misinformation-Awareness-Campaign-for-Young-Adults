@@ -9,6 +9,10 @@ from app.repositories.content_repository import (
     update_content_analysis,
 )
 from app.schemas.analysis import AnalysisResponse
+from app.core.exceptions import (
+    ContentNotFoundError,
+    AIAnalysisError,
+)
 
 
 def perform_analysis(
@@ -39,7 +43,7 @@ def analyze_content(
     content = get_content_by_id(db, content_id)
 
     if content is None:
-        raise ValueError("Content not found")
+        raise ContentNotFoundError("Content not found")
 
     if (
         content.fact_check_status != FactCheckStatus.PENDING
@@ -62,6 +66,6 @@ def reanalyze_content(
     content = get_content_by_id(db, content_id)
 
     if content is None:
-        raise ValueError("Content not found")
+        raise ContentNotFoundError("Content not found")
 
     return perform_analysis(db, content)
