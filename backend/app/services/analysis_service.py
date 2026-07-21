@@ -9,10 +9,7 @@ from app.repositories.content_repository import (
     update_content_analysis,
 )
 from app.schemas.analysis import AnalysisResponse
-from app.core.exceptions import (
-    ContentNotFoundError,
-    AIAnalysisError,
-)
+from app.core.exceptions import ContentNotFoundError
 
 
 def perform_analysis(
@@ -23,7 +20,7 @@ def perform_analysis(
     ai_response = analyze(content.content)
     analysis = parse_analysis_response(ai_response)
 
-    update_content_analysis(
+    updated_content = update_content_analysis(
         db=db,
         content=content,
         credibility_score=analysis.credibility_score,
@@ -31,7 +28,12 @@ def perform_analysis(
         analysis_summary=analysis.explanation,
     )
 
-    return analysis
+    return AnalysisResponse(
+        credibility_score=updated_content.credibility_score,
+        fact_check_status=updated_content.fact_check_status,
+        explanation=updated_content.analysis_summary,
+        analyzed_at=updated_content.analyzed_at,
+    )
 
 
 
@@ -53,6 +55,7 @@ def analyze_content(
             credibility_score=content.credibility_score,
             fact_check_status=content.fact_check_status,
             explanation=content.analysis_summary,
+            analyzed_at=content.analyzed_at,
         )
 
     return perform_analysis(db, content)

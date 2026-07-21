@@ -79,3 +79,7 @@ class Content(Base):
     owner: Mapped["User"] = relationship(
         back_populates="contents",
     )
+    analyzed_at = mapped_column(
+        DateTime,
+        nullable=True,
+    )

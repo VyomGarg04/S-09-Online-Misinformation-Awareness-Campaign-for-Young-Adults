@@ -6,6 +6,7 @@ from app.database.enums import (
     ContentType,
     FactCheckStatus,
 )
+from datetime import datetime, timezone
 
 
 def create_content(db: Session, content: Content) -> Content:
@@ -72,6 +73,7 @@ def update_content_analysis(
     content.credibility_score = credibility_score
     content.fact_check_status = fact_check_status
     content.analysis_summary = analysis_summary
+    content.analyzed_at = datetime.now(timezone.utc)
 
     db.commit()
     db.refresh(content)
