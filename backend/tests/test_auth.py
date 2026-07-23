@@ -2,19 +2,18 @@ from sqlalchemy import select
 from app.database.models.user import User
 from app.security import verify_password 
 
-
-def test_register_success(client, session):
-    # Arrange
-    payload = {
+# Arrange
+USER_PAYLOAD = {
         "full_name": "Vyom Garg",
         "email": "vyom@example.com",
         "password": "Password123",
     }
 
+def test_register_success(client, session):
     # Act
     response = client.post(
         "/auth/register",
-        json=payload,
+        json=USER_PAYLOAD,
     )
 
     # Assert Response
@@ -24,8 +23,8 @@ def test_register_success(client, session):
     assert "password" not in data
     assert "hashed_password" not in data
 
-    assert data["full_name"] == payload["full_name"]
-    assert data["email"] == payload["email"]
+    assert data["full_name"] == USER_PAYLOAD["full_name"]
+    assert data["email"] == USER_PAYLOAD["email"]
 
     assert data["is_active"] is True
     assert data["is_verified"] is False
@@ -34,16 +33,43 @@ def test_register_success(client, session):
 
     # Assert Database
     
-    stmt = select(User).where(User.email == payload["email"])
+    stmt = select(User).where(User.email == USER_PAYLOAD["email"])
     user = session.execute(stmt).scalar_one_or_none()
 
 
     assert user is not None
-    assert user.full_name == payload["full_name"]
-    assert user.email == payload["email"]
+    assert user.full_name == USER_PAYLOAD["full_name"]
+    assert user.email == USER_PAYLOAD["email"]
     assert user.is_active is True
     assert user.is_verified is False
     assert verify_password(
-        payload["password"],
+        USER_PAYLOAD["password"],
         user.hashed_password,
     )
+
+
+
+def test_register_duplicate_email(client, session):
+    # Act
+    response = client.post(
+        "/auth/register",
+        json=USER_PAYLOAD,
+    )
+
+
+    assert response.status_code == 201
+
+    response = client.post(
+        "/auth/register",
+        json=USER_PAYLOAD,
+    )
+
+    assert response.status_code == 400
+
+    data = response.json()
+
+    stmt = select(User).where(User.email == USER_PAYLOAD["email"])
+    users = session.execute(stmt).scalars().all()
+
+    assert len(users) == 1
+    assert "already exists" in data["detail"].lower()
