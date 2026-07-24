@@ -1,6 +1,6 @@
 from sqlalchemy import select
 from app.database.models.user import User
-from app.security import verify_password 
+from app.security.hashing import verify_password 
 
 # Arrange
 USER_PAYLOAD = {
@@ -72,4 +72,83 @@ def test_register_duplicate_email(client, session):
     users = session.execute(stmt).scalars().all()
 
     assert len(users) == 1
-    assert "already exists" in data["detail"].lower()
+    assert data["detail"] == "Email already registered"
+
+
+def test_login_success(client):
+    # arrange
+    response = client.post(
+        "/auth/register",
+        json=USER_PAYLOAD,
+    )
+
+    # act
+    assert response.status_code == 201
+
+    response = client.post(
+        "/auth/login",
+        data={
+            "username": USER_PAYLOAD["email"],
+            "password": USER_PAYLOAD["password"],
+        },
+    )
+
+    # assert
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert "access_token" in data
+    assert data["token_type"] == "bearer"
+    assert data["access_token"] != ""
+
+
+def test_login_invalid_password(client):
+    # arrange
+    response = client.post(
+            "/auth/register",
+            json=USER_PAYLOAD,
+        )
+    
+    
+    assert response.status_code == 201
+
+    # act
+    response = client.post(
+        "/auth/login",
+        data={
+            "username": USER_PAYLOAD["email"],
+            "password": "WrongPassword123",
+        },
+    )
+
+    # assert
+    assert response.status_code == 401
+
+    data = response.json()
+
+    assert "detail" in data
+    assert data["detail"] == "Invalid email or password"
+
+
+
+def test_login_nonexistent_user(client):
+    # Arrange
+    # No user is registered.
+
+    # act
+    response = client.post(
+        "/auth/login",
+        data={
+            "username": USER_PAYLOAD["email"],
+            "password": USER_PAYLOAD["password"],
+        },
+    )
+
+    # assert
+    assert response.status_code == 401
+
+    data = response.json()
+
+    assert "detail" in data
+    assert data["detail"] == "Invalid email or password"

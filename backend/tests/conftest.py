@@ -41,7 +41,7 @@ def session(connection):
 
 
 @pytest.fixture
-def client():
+def client(session):
     def override_get_db():
         yield session
 
@@ -51,7 +51,3 @@ def client():
         yield client
 
     app.dependency_overrides.clear()
-
-def test_app_starts(client):
-    response = client.get("/docs")
-    assert response.status_code == 200
