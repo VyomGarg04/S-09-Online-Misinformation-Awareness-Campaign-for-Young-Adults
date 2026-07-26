@@ -34,12 +34,14 @@ def register_and_login(client):
             "password": USER_PAYLOAD["password"],
         },
     )
-
+    assert response.status_code == 200
+    
     token = response.json()["access_token"]
 
     return {
         "Authorization": f"Bearer {token}"
     }
+
 
 def test_create_content_success(client, session):
     headers = register_and_login(client)
@@ -50,9 +52,18 @@ def test_create_content_success(client, session):
         headers=headers,
     )
 
-    assert response.status_code == 201
+    assert response.status_code == 200
 
     data = response.json()
+
+
+    assert "id" in data
+    assert "created_at" in data
+    assert "updated_at" in data
+
+    assert data["fact_check_status"] == "PENDING"
+    assert data["credibility_score"] is None
+    assert data["analysis_summary"] is None
 
     assert data["title"] == CONTENT_PAYLOAD["title"]
     assert data["content"] == CONTENT_PAYLOAD["content"]
@@ -70,7 +81,10 @@ def test_create_content_success(client, session):
 
     assert content is not None
     assert content.title == CONTENT_PAYLOAD["title"]
-    assert content.owner is not None
+    stmt = select(User).where(User.email == USER_PAYLOAD["email"])
+    user = session.execute(stmt).scalar_one()
+
+    assert content.owner_id == user.id
 
 
 def test_create_content_unauthorized(client):
@@ -84,3 +98,4 @@ def test_create_content_unauthorized(client):
     data = response.json()
 
     assert "detail" in data
+
