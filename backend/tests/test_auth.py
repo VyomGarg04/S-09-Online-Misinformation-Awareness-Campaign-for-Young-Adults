@@ -173,3 +173,19 @@ def register_and_login(client):
     return {
         "Authorization": f"Bearer {token}"
     }
+
+
+def test_get_current_user(client):
+    headers = register_and_login(client)
+
+    response = client.get(
+        "/auth/me",
+        headers=headers,
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["email"] == USER_PAYLOAD["email"]
+    assert data["full_name"] == USER_PAYLOAD["full_name"]
