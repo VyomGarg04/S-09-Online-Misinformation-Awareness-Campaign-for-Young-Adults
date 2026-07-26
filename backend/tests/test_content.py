@@ -241,3 +241,32 @@ def test_update_content_unauthorized(client):
     data = response.json()
 
     assert "detail" in data
+
+
+def test_delete_content_success(client, session):
+    headers = register_and_login(client)
+
+    response = client.post(
+        "/content/",
+        json=CONTENT_PAYLOAD,
+        headers=headers,
+    )
+
+    content_id = response.json()["id"]
+
+    response = client.delete(
+        f"/content/{content_id}",
+        headers=headers,
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["message"] == "Content deleted successfully"
+
+    stmt = select(Content).where(Content.id == content_id)
+
+    deleted = session.execute(stmt).scalar_one_or_none()
+
+    assert deleted is None
