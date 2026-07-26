@@ -189,3 +189,13 @@ def test_get_current_user(client):
 
     assert data["email"] == USER_PAYLOAD["email"]
     assert data["full_name"] == USER_PAYLOAD["full_name"]
+
+
+def test_get_current_user_without_token(client):
+    response = client.get("/auth/me")
+
+    assert response.status_code == 401
+
+    data = response.json()
+
+    assert "detail" in data
