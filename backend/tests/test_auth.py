@@ -152,3 +152,24 @@ def test_login_nonexistent_user(client):
 
     assert "detail" in data
     assert data["detail"] == "Invalid email or password"
+
+
+def register_and_login(client):
+    client.post(
+        "/auth/register",
+        json=USER_PAYLOAD,
+    )
+
+    response = client.post(
+        "/auth/login",
+        json={
+            "email": USER_PAYLOAD["email"],
+            "password": USER_PAYLOAD["password"],
+        },
+    )
+
+    token = response.json()["access_token"]
+
+    return {
+        "Authorization": f"Bearer {token}"
+    }
