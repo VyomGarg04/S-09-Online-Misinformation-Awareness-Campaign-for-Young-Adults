@@ -83,3 +83,39 @@ def test_theme_statistics(client):
 
     assert theme["theme"] == "Politics"
     assert theme["count"] == 2
+
+
+def test_theme_statistics_multiple_themes(client):
+    headers = register_and_login(client)
+
+    client.post(
+        "/content/",
+        json=CONTENT_PAYLOAD,
+        headers=headers,
+    )
+
+    health = CONTENT_PAYLOAD.copy()
+    health["title"] = "Health News"
+    health["theme"] = "Health"
+
+    client.post(
+        "/content/",
+        json=health,
+        headers=headers,
+    )
+
+    response = client.get("/content/themes")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data) == 2
+
+    theme_counts = {
+        item["theme"]: item["count"]
+        for item in data
+    }
+
+    assert theme_counts["Politics"] == 1
+    assert theme_counts["Health"] == 1
