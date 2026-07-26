@@ -155,3 +155,13 @@ def test_get_content_success(client):
     assert data["title"] == CONTENT_PAYLOAD["title"]
     assert data["content"] == CONTENT_PAYLOAD["content"]
     assert data["theme"] == CONTENT_PAYLOAD["theme"]
+
+
+def test_get_content_not_found(client):
+    response = client.get("/content/99999")
+
+    assert response.status_code == 404
+
+    data = response.json()
+
+    assert data["detail"] == "Content not found"
