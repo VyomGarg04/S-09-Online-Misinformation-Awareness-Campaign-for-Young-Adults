@@ -165,3 +165,46 @@ def test_get_content_not_found(client):
     data = response.json()
 
     assert data["detail"] == "Content not found"
+
+
+def test_update_content_success(client, session):
+    headers = register_and_login(client)
+
+    # Create content
+    response = client.post(
+        "/content/",
+        json=CONTENT_PAYLOAD,
+        headers=headers,
+    )
+
+    content_id = response.json()["id"]
+
+    # Update payload
+    updated_payload = {
+        "title": "Updated Fake News",
+        "content": "Updated content.",
+        "theme": "Health",
+    }
+
+    # Update request
+    response = client.put(
+        f"/content/{content_id}",
+        json=updated_payload,
+        headers=headers,
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["title"] == updated_payload["title"]
+    assert data["content"] == updated_payload["content"]
+    assert data["theme"] == updated_payload["theme"]
+
+    # Verify database
+    stmt = select(Content).where(Content.id == content_id)
+    content = session.execute(stmt).scalar_one()
+
+    assert content.title == updated_payload["title"]
+    assert content.content == updated_payload["content"]
+    assert content.theme == updated_payload["theme"]
