@@ -208,3 +208,21 @@ def test_update_content_success(client, session):
     assert content.title == updated_payload["title"]
     assert content.content == updated_payload["content"]
     assert content.theme == updated_payload["theme"]
+
+
+def test_update_content_not_found(client):
+    headers = register_and_login(client)
+
+    response = client.put(
+        "/content/99999",
+        json={
+            "title": "Updated",
+        },
+        headers=headers,
+    )
+
+    assert response.status_code == 404
+
+    data = response.json()
+
+    assert data["detail"] == "Content not found"
