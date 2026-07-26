@@ -332,3 +332,51 @@ def test_update_content_forbidden(client):
     data = response.json()
 
     assert data["detail"] == "You are not allowed to update this content."
+
+
+def test_delete_content_forbidden(client):
+    # ---------- User 1 ----------
+    headers_user1 = register_and_login(client)
+
+    response = client.post(
+        "/content/",
+        json=CONTENT_PAYLOAD,
+        headers=headers_user1,
+    )
+
+    content_id = response.json()["id"]
+
+    # ---------- User 2 ----------
+    second_user = {
+        "full_name": "Second User",
+        "email": "second@example.com",
+        "password": "Password123",
+    }
+
+    client.post(
+        "/auth/register",
+        json=second_user,
+    )
+
+    response = client.post(
+        "/auth/login",
+        data={
+            "username": second_user["email"],
+            "password": second_user["password"],
+        },
+    )
+
+    headers_user2 = {
+        "Authorization": f"Bearer {response.json()['access_token']}"
+    }
+
+    response = client.delete(
+        f"/content/{content_id}",
+        headers=headers_user2,
+    )
+
+    assert response.status_code == 403
+
+    data = response.json()
+
+    assert data["detail"] == "You are not allowed to delete this content."
