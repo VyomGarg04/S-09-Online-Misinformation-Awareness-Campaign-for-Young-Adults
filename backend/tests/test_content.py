@@ -35,7 +35,7 @@ def register_and_login(client):
         },
     )
     assert response.status_code == 200
-    
+
     token = response.json()["access_token"]
 
     return {
@@ -99,3 +99,36 @@ def test_create_content_unauthorized(client):
 
     assert "detail" in data
 
+
+
+def test_list_content(client):
+    headers = register_and_login(client)
+
+    client.post(
+        "/content/",
+        json=CONTENT_PAYLOAD,
+        headers=headers,
+    )
+
+    second_content = CONTENT_PAYLOAD.copy()
+    second_content["title"] = "Second Article"
+
+    client.post(
+        "/content/",
+        json=second_content,
+        headers=headers,
+    )
+
+    response = client.get("/content/")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert isinstance(data, list)
+    assert len(data) == 2
+
+    titles = [item["title"] for item in data]
+
+    assert CONTENT_PAYLOAD["title"] in titles
+    assert second_content["title"] in titles
