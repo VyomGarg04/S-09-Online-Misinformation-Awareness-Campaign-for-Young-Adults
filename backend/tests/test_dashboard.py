@@ -41,3 +41,13 @@ def test_dashboard_statistics(client):
 
     assert isinstance(data, list)
     assert len(data) > 0
+
+
+def test_theme_statistics_empty(client):
+    response = client.get("/content/themes")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data == []
