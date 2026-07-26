@@ -270,3 +270,13 @@ def test_delete_content_success(client, session):
     deleted = session.execute(stmt).scalar_one_or_none()
 
     assert deleted is None
+
+
+def test_delete_content_unauthorized(client):
+    response = client.delete("/content/1")
+
+    assert response.status_code == 401
+
+    data = response.json()
+
+    assert "detail" in data
