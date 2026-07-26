@@ -51,3 +51,35 @@ def test_theme_statistics_empty(client):
     data = response.json()
 
     assert data == []
+
+
+def test_theme_statistics(client):
+    headers = register_and_login(client)
+
+    client.post(
+        "/content/",
+        json=CONTENT_PAYLOAD,
+        headers=headers,
+    )
+
+    second = CONTENT_PAYLOAD.copy()
+    second["title"] = "Second Article"
+
+    client.post(
+        "/content/",
+        json=second,
+        headers=headers,
+    )
+
+    response = client.get("/content/themes")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data) == 1
+
+    theme = data[0]
+
+    assert theme["theme"] == "Politics"
+    assert theme["count"] == 2
