@@ -132,3 +132,26 @@ def test_list_content(client):
 
     assert CONTENT_PAYLOAD["title"] in titles
     assert second_content["title"] in titles
+
+
+def test_get_content_success(client):
+    headers = register_and_login(client)
+
+    response = client.post(
+        "/content/",
+        json=CONTENT_PAYLOAD,
+        headers=headers,
+    )
+
+    content_id = response.json()["id"]
+
+    response = client.get(f"/content/{content_id}")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["id"] == content_id
+    assert data["title"] == CONTENT_PAYLOAD["title"]
+    assert data["content"] == CONTENT_PAYLOAD["content"]
+    assert data["theme"] == CONTENT_PAYLOAD["theme"]
