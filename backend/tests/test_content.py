@@ -226,3 +226,18 @@ def test_update_content_not_found(client):
     data = response.json()
 
     assert data["detail"] == "Content not found"
+
+
+def test_update_content_unauthorized(client):
+    response = client.put(
+        "/content/1",
+        json={
+            "title": "Updated",
+        },
+    )
+
+    assert response.status_code == 401
+
+    data = response.json()
+
+    assert "detail" in data
