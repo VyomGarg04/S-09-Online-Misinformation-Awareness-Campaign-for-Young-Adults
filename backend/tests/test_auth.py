@@ -199,3 +199,18 @@ def test_get_current_user_without_token(client):
     data = response.json()
 
     assert "detail" in data
+
+
+def test_get_current_user_invalid_token(client):
+    response = client.get(
+        "/auth/me",
+        headers={
+            "Authorization": "Bearer invalid-token"
+        },
+    )
+
+    assert response.status_code == 401
+
+    data = response.json()
+
+    assert "detail" in data
