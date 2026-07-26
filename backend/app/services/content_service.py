@@ -119,7 +119,7 @@ def get_theme_statistics(db: Session, ) -> dict:
         response.append(
             {
                 "theme" : theme,
-                "count" : stats
+                "count" : count
             }
         )
     return response
