@@ -71,3 +71,16 @@ def test_create_content_success(client, session):
     assert content is not None
     assert content.title == CONTENT_PAYLOAD["title"]
     assert content.owner is not None
+
+
+def test_create_content_unauthorized(client):
+    response = client.post(
+        "/content/",
+        json=CONTENT_PAYLOAD,
+    )
+
+    assert response.status_code == 401
+
+    data = response.json()
+
+    assert "detail" in data
