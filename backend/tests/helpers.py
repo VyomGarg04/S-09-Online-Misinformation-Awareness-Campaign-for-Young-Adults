@@ -7,6 +7,17 @@ USER_PAYLOAD = {
 }
 
 
+CONTENT_PAYLOAD = {
+    "title": "Fake News",
+    "content": "Some misleading news content.",
+    "content_type": "ARTICLE",
+    "author": "John Doe",
+    "source": "WhatsApp",
+    "theme": "Politics",
+    "subtheme": "Election",
+}
+
+
 def register_and_login(client: TestClient):
     client.post(
         "/auth/register",
@@ -25,4 +36,27 @@ def register_and_login(client: TestClient):
 
     return {
         "Authorization": f"Bearer {token}"
+    }
+
+
+def register_and_login_as(client, full_name, email, password):
+    client.post(
+        "/auth/register",
+        json={
+            "full_name": full_name,
+            "email": email,
+            "password": password,
+        },
+    )
+
+    response = client.post(
+        "/auth/login",
+        data={
+            "username": email,
+            "password": password,
+        },
+    )
+
+    return {
+        "Authorization": f"Bearer {response.json()['access_token']}"
     }
