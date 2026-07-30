@@ -381,3 +381,22 @@ def test_dashboard_statistics(client):
     data = response.json()
 
     assert isinstance(data, list)
+
+
+
+def test_theme_statistics(client):
+    headers = register_and_login(client)
+
+    client.post(
+        "/content/",
+        json=CONTENT_PAYLOAD,
+        headers=headers,
+    )
+
+    response = client.get("/content/themes")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert isinstance(data, list)
