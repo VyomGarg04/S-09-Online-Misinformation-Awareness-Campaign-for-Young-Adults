@@ -347,3 +347,18 @@ def test_delete_content_forbidden(client):
     data = response.json()
 
     assert data["detail"] == "You are not allowed to delete this content."
+
+
+def test_delete_content_not_found(client):
+    headers = register_and_login(client)
+
+    response = client.delete(
+        "/content/99999",
+        headers=headers,
+    )
+
+    assert response.status_code == 404
+
+    data = response.json()
+
+    assert data["detail"] == "Content not found"
