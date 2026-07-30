@@ -362,3 +362,22 @@ def test_delete_content_not_found(client):
     data = response.json()
 
     assert data["detail"] == "Content not found"
+
+
+
+def test_dashboard_statistics(client):
+    headers = register_and_login(client)
+
+    client.post(
+        "/content/",
+        json=CONTENT_PAYLOAD,
+        headers=headers,
+    )
+
+    response = client.get("/content/stats")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert isinstance(data, list)
