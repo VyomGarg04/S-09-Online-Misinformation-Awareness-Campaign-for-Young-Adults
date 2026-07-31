@@ -14,21 +14,28 @@ from app.core.exceptions import (
 app = FastAPI(
     title="MediaShield API",
     version="1.0.0",
+    summary="AI-powered misinformation detection platform",
     description="""
-MediaShield is an AI-powered misinformation detection platform.
+## MediaShield API
 
-## Features
+MediaShield is an AI-powered misinformation detection platform that helps users verify the credibility of online content.
 
-- JWT Authentication
-- Content Management
-- Dashboard Statistics
-- AI Fact Checking with Gemini
-""",
+### Features
+
+- 🔐 JWT Authentication
+- 📰 Content Management
+- 🤖 Gemini AI Fact Checking
+- 📊 Dashboard Statistics
+- 📈 Theme-wise Analytics
+
+This API is built using FastAPI and SQLAlchemy.
+    """,
     contact={
         "name": "MediaShield Team",
+        "url": "https://github.com/CSquareClub/S-09-Online-Misinformation-Awareness-Campaign-for-Young-Adults",
     },
     license_info={
-        "name": "MIT",
+        "name": "MIT License",
     },
 )
 
