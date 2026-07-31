@@ -10,6 +10,26 @@ from app.core.exceptions import (
     AIAnalysisError,
 )
 
+tags_metadata = [
+    {
+        "name": "Authentication",
+        "description": "Register, login and manage authenticated users.",
+    },
+    {
+        "name": "Content",
+        "description": "Create, retrieve, update and delete content.",
+    },
+    {
+        "name": "AI",
+        "description": "Analyze content using the Gemini AI fact-checking engine.",
+    },
+    {
+        "name": "Health",
+        "description": "API health monitoring endpoints.",
+    },
+]
+
+
 
 app = FastAPI(
     title="MediaShield API",
@@ -37,6 +57,7 @@ This API is built using FastAPI and SQLAlchemy.
     license_info={
         "name": "MIT License",
     },
+    openapi_tags=tags_metadata,
 )
 
 @app.exception_handler(ContentNotFoundError)
