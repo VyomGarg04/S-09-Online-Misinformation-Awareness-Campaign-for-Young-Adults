@@ -14,7 +14,10 @@ router = APIRouter(prefix="/ai", tags=["AI"])
 
 
 
-@router.post("/{content_id}")
+@router.post(
+    "/{content_id}", 
+    response_model=AnalysisResponse,
+    )
 def analyze_content_endpoint(
     content_id: int,
     db: Session = Depends(get_db),
@@ -29,8 +32,15 @@ def analyze_content_endpoint(
             status_code=404,
             detail=str(e),
         )
+    except RuntimeError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
     
-@router.post("/{content_id}/reanalyze")
+@router.post(
+        "/{content_id}/reanalyze",
+        response_model=AnalysisResponse,
+        )
 def reanalyze_content_endpoint(
     content_id: int,
     db: Session = Depends(get_db),
@@ -45,3 +55,5 @@ def reanalyze_content_endpoint(
             status_code=404,
             detail=str(e),
         )
+    except RuntimeError as e:
+        raise HTTPException(status_code=500, detail=str(e))
