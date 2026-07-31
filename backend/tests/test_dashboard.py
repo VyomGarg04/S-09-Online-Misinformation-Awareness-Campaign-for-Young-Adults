@@ -10,8 +10,11 @@ def test_dashboard_statistics_empty(client):
 
     data = response.json()
 
-    assert isinstance(data, list)
-    assert len(data) == 0
+    assert data["total_content"] == 0
+    assert data["pending"] == 0
+    assert data["verified"] == 0
+    assert data["misleading"] == 0
+    assert data["false"] == 0
 
 
 
@@ -39,8 +42,11 @@ def test_dashboard_statistics(client):
 
     data = response.json()
 
-    assert isinstance(data, list)
-    assert len(data) > 0
+    assert data["total_content"] == 2
+    assert data["pending"] == 2
+    assert data["verified"] == 0
+    assert data["misleading"] == 0
+    assert data["false"] == 0
 
 
 def test_theme_statistics_empty(client):

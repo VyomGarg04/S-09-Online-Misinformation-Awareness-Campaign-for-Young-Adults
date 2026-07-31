@@ -380,9 +380,30 @@ def test_dashboard_statistics(client):
 
     data = response.json()
 
-    assert isinstance(data, list)
+    assert data["total_content"] == 1
+    assert data["pending"] == 1
+    assert data["verified"] == 0
+    assert data["misleading"] == 0
+    assert data["false"] == 0
 
 
+def test_dashboard_statistics_empty(client):
+    headers = register_and_login(client)
+
+
+    response = client.get("/content/stats")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["total_content"] == 0
+    assert data["pending"] == 0
+    assert data["verified"] == 0
+    assert data["misleading"] == 0
+    assert data["false"] == 0
+
+  
 
 def test_theme_statistics(client):
     headers = register_and_login(client)

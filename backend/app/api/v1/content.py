@@ -72,7 +72,7 @@ def list_content_endpoint(
         search,
     )
 
-@router.get("/stats",response_model=list[DashboardStatistics],)
+@router.get("/stats",response_model=DashboardStatistics,)
 def get_dashboard_statistics_endpoint(
     db: Session = Depends(get_db),
 ):

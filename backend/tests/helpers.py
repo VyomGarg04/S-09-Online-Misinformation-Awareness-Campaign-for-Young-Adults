@@ -10,7 +10,7 @@ USER_PAYLOAD = {
 CONTENT_PAYLOAD = {
     "title": "Fake News",
     "content": "Some misleading news content.",
-    "content_type": "ARTICLE",
+    "content_type": "NEWS",
     "author": "John Doe",
     "source": "WhatsApp",
     "theme": "Politics",
