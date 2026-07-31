@@ -86,3 +86,9 @@ def test_reanalyze(mock_analyze, client):
     assert response.status_code == 200
 
     mock_analyze.assert_called_once()
+
+
+def test_ai_content_not_found(client):
+    response = client.post("/ai/9999")
+
+    assert response.status_code == 404
