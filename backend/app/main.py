@@ -12,9 +12,24 @@ from app.core.exceptions import (
 
 
 app = FastAPI(
-    title=settings.app_name,
-    version=settings.app_version,
-    description="Backend API for MediaShield",
+    title="MediaShield API",
+    version="1.0.0",
+    description="""
+MediaShield is an AI-powered misinformation detection platform.
+
+## Features
+
+- JWT Authentication
+- Content Management
+- Dashboard Statistics
+- AI Fact Checking with Gemini
+""",
+    contact={
+        "name": "MediaShield Team",
+    },
+    license_info={
+        "name": "MIT",
+    },
 )
 
 @app.exception_handler(ContentNotFoundError)
@@ -43,3 +58,6 @@ async def ai_analysis_exception_handler(
 
 
 app.include_router(api_router)
+
+
+

@@ -38,9 +38,15 @@ def analyze_content_endpoint(
 
     
 @router.post(
-        "/{content_id}/reanalyze",
-        response_model=AnalysisResponse,
-        )
+    "/{content_id}/reanalyze",
+    response_model=AnalysisResponse,
+    summary="Reanalyze content",
+    description="Forces a fresh AI analysis of a content item.",
+    responses={
+        404: {"description": "Content not found"},
+        500: {"description": "Gemini analysis failed"},
+    },
+)
 def reanalyze_content_endpoint(
     content_id: int,
     db: Session = Depends(get_db),

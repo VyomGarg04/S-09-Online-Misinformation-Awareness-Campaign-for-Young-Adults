@@ -30,7 +30,17 @@ router = APIRouter(prefix="/content", tags=["Content"])
 
 
 
-@router.post("/", response_model=ContentResponse)
+@router.post(
+        "/",
+        response_model=ContentResponse,
+        summary="Create content",
+        description="Create a new content item that can later be analyzed by the AI engine.",
+        status_code=201,
+        responses={
+            400: {"description": "Invalid content data"},
+            401: {"description": "Unauthorized"},
+        },
+    )
 def create_content_endpoint(
     content_data: ContentCreate,
     db: Session = Depends(get_db),
@@ -52,7 +62,13 @@ def create_content_endpoint(
 
 
 
-@router.get("/", response_model=list[ContentResponse])
+@router.get(
+        "/", 
+        response_model=list[ContentResponse],
+        summary="List all content",
+        description="Returns paginated content with optional filters."
+    )
+
 def list_content_endpoint(
     page: int = 1,
     page_size: int = 10,
@@ -72,19 +88,46 @@ def list_content_endpoint(
         search,
     )
 
-@router.get("/stats",response_model=DashboardStatistics,)
+@router.get(
+        "/stats",
+        response_model=DashboardStatistics,
+        summary="Get dashboard statistics",
+        description="Returns aggregated dashboard statistics.",
+        responses={
+            404: {"description": "Content not found"},
+        }
+    )
+
 def get_dashboard_statistics_endpoint(
     db: Session = Depends(get_db),
 ):
     return get_dashboard_statistics_service(db)
 
-@router.get("/themes", response_model=list[ThemeStatistic],)
+
+@router.get(
+        "/themes", 
+        response_model=list[ThemeStatistic],
+        summary="Get Theme statistics",
+        description="Returns content grouped by theme.",
+        responses={
+            404: {"description": "Content not found"},
+        },
+    )
 def get_theme_statistics_endpoint(
     db: Session = Depends(get_db),
 ):
     return get_theme_statistics_service(db)
 
-@router.get("/{content_id}", response_model=ContentResponse)
+
+@router.get(
+        "/{content_id}", 
+        response_model=ContentResponse,
+        summary="Get content by ID",
+        description ="Returns the content by their content id",
+        responses={
+            404: {"description": "Content not found"},
+        }
+    )
 def get_content_endpoint(
     content_id: int,
     db: Session = Depends(get_db),
@@ -102,7 +145,16 @@ def get_content_endpoint(
 
 
 
-@router.put("/{content_id}", response_model=ContentResponse)
+@router.put(
+        "/{content_id}", 
+        response_model=ContentResponse,
+        summary="Update content",
+        description ="Returns the updated content",
+        responses={
+            403: {"description": "Permission denied"},
+            404: {"description": "Content not found"},
+        }
+    )
 def update_content_endpoint_service(
     content_id: int,
     content_data: ContentUpdate,
@@ -131,7 +183,16 @@ def update_content_endpoint_service(
 
 
 
-@router.delete("/{content_id}")
+@router.delete(
+    "/{content_id}",
+    summary="Delete content",
+    description="Deletes a content item.",
+    status_code=200,
+    responses={
+        403: {"description": "Permission denied"},
+        404: {"description": "Content not found"},
+    },
+)
 def delete_content_endpoint(
     content_id: int,
     db: Session = Depends(get_db),

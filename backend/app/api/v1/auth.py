@@ -25,6 +25,11 @@ router = APIRouter(
     "/register",
     response_model=UserResponse,
     status_code=status.HTTP_201_CREATED,
+    summary="Register user",
+    description="Creates a new user account.",
+    responses={
+        400: {"description": "Email already registered"},
+    },
 )
 def register(
     user: UserCreate,
@@ -43,6 +48,11 @@ def register(
 @router.post(
     "/login",
     response_model=Token,
+    summary="Login",
+    description="Authenticates a user and returns a JWT access token.",
+    responses={
+        401: {"description": "Invalid credentials"},
+    },
 )
 def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -66,6 +76,11 @@ def login(
 @router.get(
     "/me",
     response_model=UserResponse,
+    summary="Current user",
+    description="Returns the authenticated user's profile.",
+    responses={
+        401: {"description": "Unauthorized"},
+    },
 )
 def get_me(
     current_user: User = Depends(get_current_user),
