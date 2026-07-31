@@ -1,5 +1,5 @@
 from app.database.enums import FactCheckStatus
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
 class AnalysisResponse(BaseModel):
