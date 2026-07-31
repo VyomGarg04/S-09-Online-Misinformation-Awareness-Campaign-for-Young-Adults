@@ -60,3 +60,29 @@ def test_ai_analysis_cached(mock_analyze, client):
     assert response.status_code == 200
 
     mock_analyze.assert_not_called()
+
+
+
+@patch("app.services.analysis_service.analyze")
+def test_reanalyze(mock_analyze, client):
+    mock_analyze.return_value = MOCK_AI_RESPONSE
+
+    headers = register_and_login(client)
+
+    response = client.post(
+        "/content/",
+        json=CONTENT_PAYLOAD,
+        headers=headers,
+    )
+
+    content_id = response.json()["id"]
+
+    client.post(f"/ai/{content_id}")
+
+    mock_analyze.reset_mock()
+
+    response = client.post(f"/ai/{content_id}/reanalyze")
+
+    assert response.status_code == 200
+
+    mock_analyze.assert_called_once()
