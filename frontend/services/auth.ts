@@ -1,41 +1,29 @@
-import api from "@/lib/api";
+import { apiFetch } from "@/lib/api";
+import { RegisterData, LoginData, Token, User } from "@/types/auth";
 
-export interface RegisterData {
-  full_name: string;
-  email: string;
-  password: string;
+export function register(data: RegisterData) {
+    return apiFetch<User>("/auth/register", {
+        method: "POST",
+        body: JSON.stringify(data),
+    });
 }
 
-export interface LoginData {
-  email: string;
-  password: string;
+export function login(data: LoginData) {
+    const body = new URLSearchParams();
+
+    body.append("username", data.email);
+    body.append("password", data.password);
+
+    return apiFetch<Token>("/auth/login", {
+        method: "POST",
+        headers: {
+            "Content-Type":
+                "application/x-www-form-urlencoded",
+        },
+        body,
+    });
 }
 
-export async function register(data: RegisterData) {
-  const response = await api.post("/auth/register", data);
-  return response.data;
-}
-
-export async function login(data: LoginData) {
-  const formData = new URLSearchParams();
-
-  formData.append("username", data.email);
-  formData.append("password", data.password);
-
-  const response = await api.post(
-    "/auth/login",
-    formData,
-    {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    }
-  );
-
-  return response.data;
-}
-
-export async function getCurrentUser() {
-  const response = await api.get("/auth/me");
-  return response.data;
+export function getCurrentUser() {
+    return apiFetch<User>("/auth/me");
 }
