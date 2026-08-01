@@ -1,22 +1,35 @@
-import axios from "axios";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+export async function apiFetch<T>(
+    endpoint: string,
+    options: RequestInit = {}
+): Promise<T> {
+    const token =
+        typeof window !== "undefined"
+            ? localStorage.getItem("token")
+            : null;
 
-api.interceptors.request.use((config) => {
-  if (typeof window !== "undefined") {
-    const token = localStorage.getItem("token");
+    const headers = new Headers(options.headers);
+
+    // Don't override FormData content type
+    if (!(options.body instanceof FormData)) {
+        headers.set("Content-Type", "application/json");
+    }
 
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+        headers.set("Authorization", `Bearer ${token}`);
     }
-  }
 
-  return config;
-});
+    const response = await fetch(`${API_URL}${endpoint}`, {
+        ...options,
+        headers,
+    });
 
-export default api;
+    const data = await response.json().catch(() => null);
+
+    if (!response.ok) {
+        throw new Error(data?.detail ?? "Something went wrong");
+    }
+
+    return data as T;
+}
