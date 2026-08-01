@@ -1,31 +1,22 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import axios from "axios";
 
-export async function apiFetch(
-    endpoint: string,
-    options: RequestInit = {}
-) {
-    const token =
-        typeof window !== "undefined"
-            ? localStorage.getItem("token")
-            : null;
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-    const headers = new Headers(options.headers);
-
-    headers.set("Content-Type", "application/json");
+api.interceptors.request.use((config) => {
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("token");
 
     if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
+      config.headers.Authorization = `Bearer ${token}`;
     }
+  }
 
-    const response = await fetch(`${API_URL}${endpoint}`, {
-        ...options,
-        headers,
-    });
+  return config;
+});
 
-    if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.detail || "Something went wrong");
-    }
-
-    return response.json();
-}
+export default api;
