@@ -21,19 +21,12 @@ export function Hero() {
 
           <h1 className="text-5xl font-bold leading-tight lg:text-7xl">
 
-            Think
+            Verification in the
             <br />
 
             <span className="text-primary">
-              Critically.
+              Age of Noise.
             </span>
-
-            <br />
-
-            Verify
-            <br />
-
-            Confidently.
 
           </h1>
 
