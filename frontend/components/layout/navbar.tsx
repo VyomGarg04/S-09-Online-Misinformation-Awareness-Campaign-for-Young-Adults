@@ -42,12 +42,12 @@ export function Navbar() {
 
         {/* Right Side */}
         <div className="flex items-center gap-3">
-          <Button asChild size="lg">
             <Link href="/register">
-              Get Started
-              <ArrowRight className="ml-2 h-4 w-4" />
+                <Button size="lg">
+                    Get Started
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
             </Link>
-          </Button>
         </div>
       </div>
     </header>
