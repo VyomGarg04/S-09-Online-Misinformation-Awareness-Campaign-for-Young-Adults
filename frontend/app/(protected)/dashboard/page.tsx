@@ -8,6 +8,7 @@ import {
 import { StatsCard } from "@/components/dashboard/stats-card";
 import { WelcomeBanner } from "@/components/dashboard/welcome-banner";
 import { QuickActions } from "@/components/dashboard/quick-actions";
+import { RecentActivity } from "@/components/dashboard/recent-activity";
 
 const stats = [
   {
@@ -58,6 +59,7 @@ export default function DashboardPage() {
       </section>
 
       <QuickActions />
+      <RecentActivity />
     </div>
   );
 }

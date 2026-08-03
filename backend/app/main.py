@@ -9,6 +9,7 @@ from app.core.exceptions import (
     ContentNotFoundError,
     AIAnalysisError,
 )
+from fastapi.middleware.cors import CORSMiddleware
 
 tags_metadata = [
     {
@@ -58,6 +59,17 @@ This API is built using FastAPI and SQLAlchemy.
         "name": "MIT License",
     },
     openapi_tags=tags_metadata,
+)
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @app.exception_handler(ContentNotFoundError)

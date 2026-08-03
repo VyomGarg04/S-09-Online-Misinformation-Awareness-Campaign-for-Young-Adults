@@ -4,6 +4,7 @@ import { Bell, LogOut, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { removeToken } from "@/lib/auth";
 
@@ -15,6 +16,11 @@ export function Navbar() {
     removeToken();
     router.replace("/login");
   }
+  const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+    setMounted(true);
+    }, []);
 
   return (
     <header className="flex h-16 items-center justify-between border-b bg-background px-8">
@@ -34,11 +40,12 @@ export function Navbar() {
             setTheme(theme === "dark" ? "light" : "dark")
           }
         >
-          {theme === "dark" ? (
-            <Sun className="h-5 w-5" />
-          ) : (
-            <Moon className="h-5 w-5" />
-          )}
+          {mounted &&
+            (theme === "dark" ? (
+                <Sun className="h-5 w-5" />
+            ) : (
+                <Moon className="h-5 w-5" />
+            ))}
         </Button>
 
         <Button
