@@ -1,55 +1,63 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { Bell, LogOut, Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/branding";
+import { removeToken } from "@/lib/auth";
 
 export function Navbar() {
+  const { theme, setTheme } = useTheme();
+  const router = useRouter();
+
+  function logout() {
+    removeToken();
+    router.replace("/login");
+  }
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-6 lg:px-8">
+    <header className="flex h-16 items-center justify-between border-b bg-background px-8">
 
-        {/* Logo */}
-        <Link href="/" className="shrink-0">
-          <Logo />
-        </Link>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-8 md:flex">
-          <Link
-            href="#features"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Features
-          </Link>
-
-          <Link
-            href="#how-it-works"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            How it Works
-          </Link>
-
-          <Link
-            href="#resources"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Resources
-          </Link>
-        </nav>
-
-        {/* Right Side */}
-        <div className="flex items-center gap-3">
-            <Link href="/register">
-                <Button size="lg">
-                    Get Started
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-            </Link>
-        </div>
+      <div>
+        <h1 className="text-xl font-semibold">
+          Dashboard
+        </h1>
       </div>
+
+      <div className="flex items-center gap-3">
+
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() =>
+            setTheme(theme === "dark" ? "light" : "dark")
+          }
+        >
+          {theme === "dark" ? (
+            <Sun className="h-5 w-5" />
+          ) : (
+            <Moon className="h-5 w-5" />
+          )}
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="icon"
+        >
+          <Bell className="h-5 w-5" />
+        </Button>
+
+        <Button
+          variant="destructive"
+          onClick={logout}
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          Logout
+        </Button>
+
+      </div>
+
     </header>
   );
 }
