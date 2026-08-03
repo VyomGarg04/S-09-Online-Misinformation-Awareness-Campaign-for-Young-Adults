@@ -39,6 +39,7 @@ export default function LoginForm() {
   });
 
   async function onSubmit(data: FormData) {
+    console.log("Login submitted", data);
     try {
       setLoading(true);
 
@@ -88,13 +89,20 @@ export default function LoginForm() {
           {errors.password?.message}
         </p>
       </div>
+        <Button
+        type="submit"
+        className="w-full"
+        disabled={loading}
+        >
+        Login
+        </Button>
 
-      <Button
+      {/* <Button
         className="w-full"
         disabled={loading}
       >
         {loading ? "Signing in..." : "Login"}
-      </Button>
+      </Button> */}
 
       <p className="text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}

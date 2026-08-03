@@ -1,19 +1,22 @@
+import { getToken } from "@/lib/auth";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function apiFetch<T>(
     endpoint: string,
     options: RequestInit = {}
 ): Promise<T> {
-    const token =
-        typeof window !== "undefined"
-            ? localStorage.getItem("token")
-            : null;
+
+
+    const token = getToken();
 
     const headers = new Headers(options.headers);
 
-    // Don't override FormData content type
-    if (!(options.body instanceof FormData)) {
-        headers.set("Content-Type", "application/json");
+    // Only set JSON if the caller didn't specify a Content-Type
+    if (
+    !(options.body instanceof FormData) &&
+    !headers.has("Content-Type")
+    ) {
+    headers.set("Content-Type", "application/json");
     }
 
     if (token) {
