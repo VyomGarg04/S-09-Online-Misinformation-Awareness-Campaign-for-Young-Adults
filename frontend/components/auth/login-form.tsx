@@ -16,6 +16,8 @@ import { Input } from "@/components/ui/input";
 
 import { toast } from "sonner";
 
+import { saveToken } from "@/lib/auth";
+
 const schema = z.object({
   email: z.email("Invalid email"),
   password: z.string().min(8, "Minimum 8 characters"),
@@ -42,10 +44,7 @@ export default function LoginForm() {
 
       const response = await login(data);
 
-      localStorage.setItem(
-        "access_token",
-        response.access_token
-      );
+      saveToken(response.access_token);
 
       toast.success("Welcome back!");
 
