@@ -20,14 +20,8 @@ export function Hero() {
         <div className="space-y-5">
 
           <h1 className="text-5xl font-bold leading-tight lg:text-7xl">
-
-            Verification in the
-            <br />
-
-            <span className="text-primary">
-              Age of Noise.
-            </span>
-
+            <span className="block">Verification in the</span>
+            <span className="block text-primary">Age of Noise.</span>
           </h1>
 
           <p className="max-w-xl text-lg leading-8 text-muted-foreground">
