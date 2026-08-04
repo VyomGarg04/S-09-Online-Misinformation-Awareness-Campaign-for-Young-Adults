@@ -19,8 +19,8 @@ export function Hero() {
 
         <div className="space-y-5">
 
-          <h1 className="text-5xl font-bold leading-tight lg:text-7xl">
-            <span className="block">Verification in the</span>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
+            <span className="block whitespace-nowrap">Verification in the</span>
             <span className="block text-primary">Age of Noise.</span>
           </h1>
 
