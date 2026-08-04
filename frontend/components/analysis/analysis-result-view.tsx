@@ -20,6 +20,7 @@ import { AnalysisResponse } from "@/types/analysis";
 import { ContentItem, FactCheckStatus } from "@/types/content";
 import { DeepfakeInspector } from "@/components/analysis/deepfake-inspector";
 import { ReportExportModal } from "@/components/analysis/report-export-modal";
+import { DebunkingGenerator } from "@/components/analysis/debunking-generator";
 
 interface AnalysisResultViewProps {
   contentItem: ContentItem;
@@ -212,6 +213,9 @@ Explanation: ${analysis.explanation}`;
 
       {/* Deepfake & Forensic Media Inspector */}
       <DeepfakeInspector />
+
+      {/* AI Social Debunking Response Generator */}
+      <DebunkingGenerator contentItem={contentItem} analysis={analysis} />
 
       {/* Report Printable Export Modal */}
       <ReportExportModal
