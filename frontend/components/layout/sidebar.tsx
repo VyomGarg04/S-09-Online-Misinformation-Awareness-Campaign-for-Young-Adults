@@ -8,6 +8,7 @@ import {
   Search,
   User,
   GraduationCap,
+  TrendingUp,
 } from "lucide-react";
 import { Logo } from "@/components/branding";
 import { cn } from "@/lib/utils";
@@ -27,6 +28,11 @@ const navigation = [
     name: "Content",
     href: "/content",
     icon: FileText,
+  },
+  {
+    name: "Trend Analytics",
+    href: "/trends",
+    icon: TrendingUp,
   },
   {
     name: "Literacy Hub",
