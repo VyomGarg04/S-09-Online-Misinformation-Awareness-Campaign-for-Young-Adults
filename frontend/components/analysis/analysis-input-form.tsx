@@ -84,42 +84,67 @@ export function AnalysisInputForm({
   const handleRunExisting = async () => {
     if (selectedContentId) {
       await onAnalyzeExisting(selectedContentId);
+    } else if (existingItems.length > 0) {
+      // Default to first item if none selected
+      const firstId = existingItems[0].id;
+      onSelectExisting(firstId);
+      await onAnalyzeExisting(firstId);
     }
   };
+
+  const selectedItemObj = existingItems.find((i) => i.id === selectedContentId);
 
   return (
     <div className="rounded-2xl border bg-card p-6 shadow-xs space-y-6">
       {/* Existing Content Item Selector */}
       {existingItems.length > 0 && (
-        <div className="p-4 rounded-xl bg-muted/40 border space-y-2">
-          <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            <Database className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-            <span>Option 1: Analyze an item from your Content Library</span>
+        <div className="p-4 rounded-xl bg-muted/40 border space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              <Database className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+              <span>Option 1: Select & Analyze an item from your Content Library</span>
+            </div>
+            {selectedItemObj && (
+              <span className="text-[11px] font-mono text-amber-700 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded">
+                Status: {selectedItemObj.fact_check_status}
+              </span>
+            )}
           </div>
+
           <div className="flex flex-col sm:flex-row items-center gap-3">
             <Select
               value={selectedContentId ? String(selectedContentId) : ""}
-              onValueChange={(val) => val && onSelectExisting(Number(val))}
+              onValueChange={(val) => {
+                if (val) {
+                  onSelectExisting(Number(val));
+                }
+              }}
             >
-              <SelectTrigger className="flex-1 bg-background">
-                <SelectValue placeholder="Choose a content item from database..." />
+              <SelectTrigger className="flex-1 bg-background text-xs font-medium">
+                <SelectValue placeholder="Choose a content item from database...">
+                  {selectedItemObj
+                    ? `${selectedItemObj.title} (${selectedItemObj.content_type})`
+                    : "Choose a content item from database..."}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {existingItems.map((item) => (
                   <SelectItem key={item.id} value={String(item.id)}>
-                    {item.title} ({item.content_type}) - {item.fact_check_status}
+                    <span className="font-semibold">{item.title}</span>{" "}
+                    <span className="text-muted-foreground">({item.content_type})</span>
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
 
             <Button
+              type="button"
               onClick={handleRunExisting}
-              disabled={!selectedContentId || isAnalyzing}
-              className="w-full sm:w-auto bg-amber-700 hover:bg-amber-800 text-white dark:bg-amber-600 dark:hover:bg-amber-700 shrink-0"
+              disabled={isAnalyzing}
+              className="w-full sm:w-auto bg-amber-700 hover:bg-amber-800 text-white dark:bg-amber-600 dark:hover:bg-amber-700 shrink-0 font-semibold text-xs gap-1.5"
             >
-              <Sparkles className="mr-2 h-4 w-4" />
-              {isAnalyzing ? "Analyzing..." : "Analyze Item"}
+              <Sparkles className="h-4 w-4" />
+              {isAnalyzing ? "Analyzing with AI..." : "Analyze Selected Item"}
             </Button>
           </div>
         </div>
