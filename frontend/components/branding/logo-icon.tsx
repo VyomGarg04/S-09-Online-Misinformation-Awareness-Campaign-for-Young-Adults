@@ -4,10 +4,9 @@ interface LogoIconProps {
 }
 
 /**
- * MediaShield Brand Icon — Geometric hexagonal emblem with
- * six triangular facets in earthy brown tones.
- * Represents information from multiple perspectives converging
- * on truth at the center.
+ * MediaShield Brand Icon — 3D isometric cube within a hexagonal
+ * emblem. Alternating warm brown facets create depth and dimension.
+ * Represents multiple perspectives converging on truth at the center.
  */
 export function LogoIcon({ className, size = 40 }: LogoIconProps) {
   return (
@@ -20,44 +19,48 @@ export function LogoIcon({ className, size = 40 }: LogoIconProps) {
       className={`shrink-0 ${className ?? ""}`}
       aria-label="MediaShield Logo Icon"
     >
-      {/* Outer hexagon clip */}
-      <defs>
-        <clipPath id="hexClip">
-          <polygon points="50,3 93.3,28 93.3,72 50,97 6.7,72 6.7,28" />
-        </clipPath>
-      </defs>
+      {/* Hexagon outline shape */}
+      <polygon
+        points="50,2 93,27 93,73 50,98 7,73 7,27"
+        fill="#3B2A1E"
+      />
 
-      <g clipPath="url(#hexClip)">
-        {/* Background fill */}
-        <rect width="100" height="100" fill="#E8DCC6" />
+      {/* 6 triangular facets — alternating tones for 3D cube illusion */}
 
-        {/* Top triangle */}
-        <polygon points="50,3 93.3,28 50,50" fill="#3B2A1E" />
-        {/* Top-left triangle */}
-        <polygon points="50,3 6.7,28 50,50" fill="#6B4A2E" />
-        {/* Right triangle */}
-        <polygon points="93.3,28 93.3,72 50,50" fill="#A9744A" />
-        {/* Bottom-right triangle */}
-        <polygon points="93.3,72 50,97 50,50" fill="#6B4A2E" />
-        {/* Bottom-left triangle */}
-        <polygon points="50,97 6.7,72 50,50" fill="#3B2A1E" />
-        {/* Left triangle */}
-        <polygon points="6.7,28 6.7,72 50,50" fill="#A9744A" />
+      {/* Top-right facet (lightest — top face of cube) */}
+      <polygon points="50,2 93,27 50,50" fill="#C4956A" />
 
-        {/* Inner hexagon highlight */}
-        <polygon
-          points="50,22 72,35 72,65 50,78 28,65 28,35"
-          fill="none"
-          stroke="#E8DCC6"
-          strokeWidth="1.2"
-          opacity="0.5"
-        />
+      {/* Top-left facet (medium light) */}
+      <polygon points="50,2 7,27 50,50" fill="#A9744A" />
 
-        {/* Center lines radiating out — "multiple perspectives" motif */}
-        <line x1="50" y1="3" x2="50" y2="97" stroke="#F6F2EB" strokeWidth="1" opacity="0.35" />
-        <line x1="6.7" y1="28" x2="93.3" y2="72" stroke="#F6F2EB" strokeWidth="1" opacity="0.35" />
-        <line x1="93.3" y1="28" x2="6.7" y2="72" stroke="#F6F2EB" strokeWidth="1" opacity="0.35" />
-      </g>
+      {/* Right facet (medium — right face of cube) */}
+      <polygon points="93,27 93,73 50,50" fill="#8B5E3C" />
+
+      {/* Left facet (warm mid-tone — left face of cube) */}
+      <polygon points="7,27 7,73 50,50" fill="#6B4A2E" />
+
+      {/* Bottom-right facet (darker) */}
+      <polygon points="93,73 50,98 50,50" fill="#4A3425" />
+
+      {/* Bottom-left facet (darkest) */}
+      <polygon points="50,98 7,73 50,50" fill="#3B2A1E" />
+
+      {/* Inner cube edges — subtle cream lines for 3D structure */}
+      <line x1="50" y1="2" x2="50" y2="50" stroke="#E8DCC6" strokeWidth="0.8" opacity="0.6" />
+      <line x1="50" y1="50" x2="50" y2="98" stroke="#E8DCC6" strokeWidth="0.8" opacity="0.3" />
+      <line x1="7" y1="27" x2="50" y2="50" stroke="#E8DCC6" strokeWidth="0.8" opacity="0.4" />
+      <line x1="93" y1="27" x2="50" y2="50" stroke="#E8DCC6" strokeWidth="0.8" opacity="0.4" />
+      <line x1="7" y1="73" x2="50" y2="50" stroke="#E8DCC6" strokeWidth="0.8" opacity="0.3" />
+      <line x1="93" y1="73" x2="50" y2="50" stroke="#E8DCC6" strokeWidth="0.8" opacity="0.3" />
+
+      {/* Inner hexagon — smaller, for the "truth at center" motif */}
+      <polygon
+        points="50,22 72,36 72,64 50,78 28,64 28,36"
+        fill="none"
+        stroke="#E8DCC6"
+        strokeWidth="0.7"
+        opacity="0.35"
+      />
     </svg>
   );
 }

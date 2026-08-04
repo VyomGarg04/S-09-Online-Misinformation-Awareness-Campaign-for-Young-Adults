@@ -11,17 +11,22 @@ export function Footer() {
 
         <div className="flex gap-8">
 
-          <Link href="#">
+          <Link href="/privacy" className="hover:text-foreground transition-colors">
             Privacy
           </Link>
 
-          <Link href="#">
+          <Link href="/terms" className="hover:text-foreground transition-colors">
             Terms
           </Link>
 
-          <Link href="https://github.com">
+          <a
+            href="https://github.com/VyomGarg04"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-foreground transition-colors"
+          >
             GitHub
-          </Link>
+          </a>
 
         </div>
 
