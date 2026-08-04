@@ -17,7 +17,7 @@ export function ViralRadar() {
         setThemes(data);
       } catch (err) {
         console.error("Failed to load theme stats:", err);
-      } font-medium;
+      }
       setIsLoading(false);
     }
     load();
