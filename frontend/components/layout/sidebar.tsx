@@ -9,6 +9,7 @@ import {
   User,
   GraduationCap,
   TrendingUp,
+  ShieldCheck,
 } from "lucide-react";
 import { Logo } from "@/components/branding";
 import { cn } from "@/lib/utils";
@@ -33,6 +34,11 @@ const navigation = [
     name: "Trend Analytics",
     href: "/trends",
     icon: TrendingUp,
+  },
+  {
+    name: "Source Index",
+    href: "/sources",
+    icon: ShieldCheck,
   },
   {
     name: "Literacy Hub",
