@@ -52,7 +52,7 @@ export function ContentFilters({
         </div>
 
         {/* Content Type Filter */}
-        <Select value={contentType} onValueChange={onContentTypeChange}>
+        <Select value={contentType} onValueChange={(val) => onContentTypeChange(val || "ALL")}>
           <SelectTrigger className="w-full sm:w-[170px] bg-background/80">
             <SelectValue placeholder="Content Type" />
           </SelectTrigger>
@@ -68,7 +68,7 @@ export function ContentFilters({
         </Select>
 
         {/* Fact Check Status Filter */}
-        <Select value={status} onValueChange={onStatusChange}>
+        <Select value={status} onValueChange={(val) => onStatusChange(val || "ALL")}>
           <SelectTrigger className="w-full sm:w-[170px] bg-background/80">
             <SelectValue placeholder="Fact Status" />
           </SelectTrigger>

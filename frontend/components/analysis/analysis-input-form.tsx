@@ -99,7 +99,7 @@ export function AnalysisInputForm({
           <div className="flex flex-col sm:flex-row items-center gap-3">
             <Select
               value={selectedContentId ? String(selectedContentId) : ""}
-              onValueChange={(val) => onSelectExisting(Number(val))}
+              onValueChange={(val) => val && onSelectExisting(Number(val))}
             >
               <SelectTrigger className="flex-1 bg-background">
                 <SelectValue placeholder="Choose a content item from database..." />
@@ -209,7 +209,7 @@ export function AnalysisInputForm({
                 <Label htmlFor="type_url">Content Type</Label>
                 <Select
                   value={contentType}
-                  onValueChange={(val) => setContentType(val as ContentType)}
+                  onValueChange={(val) => val && setContentType(val as ContentType)}
                 >
                   <SelectTrigger id="type_url">
                     <SelectValue placeholder="Select type" />
@@ -259,7 +259,7 @@ export function AnalysisInputForm({
                 <Label htmlFor="type_text">Content Type</Label>
                 <Select
                   value={contentType}
-                  onValueChange={(val) => setContentType(val as ContentType)}
+                  onValueChange={(val) => val && setContentType(val as ContentType)}
                 >
                   <SelectTrigger id="type_text">
                     <SelectValue placeholder="Select type" />

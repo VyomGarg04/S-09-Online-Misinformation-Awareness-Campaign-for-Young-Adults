@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { listContent } from "@/services/content";
 import { ContentItem } from "@/types/content";
-import { Sparkles, ArrowRight, ShieldCheck, AlertTriangle, AlertOctagon, Clock, HelpCircle } from "lucide-react";
+import { Sparkles, ArrowRight, ShieldCheck, AlertTriangle, AlertOctagon, Clock } from "lucide-react";
 
 export function RecentActivity() {
   const [items, setItems] = useState<ContentItem[]>([]);
@@ -38,12 +39,13 @@ export function RecentActivity() {
           </p>
         </div>
 
-        <Button variant="ghost" size="sm" asChild className="text-xs text-amber-700 dark:text-amber-400 gap-1">
-          <Link href="/content">
-            View All Content
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
-        </Button>
+        <Link
+          href="/content"
+          className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "text-xs text-amber-700 dark:text-amber-400 gap-1")}
+        >
+          View All Content
+          <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
       </div>
 
       {isLoading ? (
@@ -56,12 +58,13 @@ export function RecentActivity() {
         <div className="p-8 text-center border border-dashed rounded-xl bg-muted/20">
           <p className="text-sm font-medium text-foreground">No recent activity yet</p>
           <p className="text-xs text-muted-foreground mt-1">Submit your first article or claim to start monitoring media credibility.</p>
-          <Button asChild size="sm" className="mt-3 bg-amber-700 text-white hover:bg-amber-800 text-xs">
-            <Link href="/analysis">
-              <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-              Analyze First Item
-            </Link>
-          </Button>
+          <Link
+            href="/analysis"
+            className={cn(buttonVariants({ size: "sm" }), "mt-3 bg-amber-700 text-white hover:bg-amber-800 text-xs")}
+          >
+            <Sparkles className="mr-1.5 h-3.5 w-3.5" />
+            Analyze First Item
+          </Link>
         </div>
       ) : (
         <div className="divide-y">
@@ -96,12 +99,13 @@ export function RecentActivity() {
 
               <div className="flex items-center gap-2 shrink-0">
                 <StatusBadgeSmall status={item.fact_check_status} />
-                <Button variant="outline" size="sm" asChild className="h-7 text-xs px-2.5">
-                  <Link href={`/analysis?id=${item.id}`}>
-                    <Sparkles className="h-3 w-3 text-amber-600 mr-1" />
-                    Inspect
-                  </Link>
-                </Button>
+                <Link
+                  href={`/analysis?id=${item.id}`}
+                  className={cn(buttonVariants({ variant: "outline", size: "sm" }), "h-7 text-xs px-2.5")}
+                >
+                  <Sparkles className="h-3 w-3 text-amber-600 mr-1" />
+                  Inspect
+                </Link>
               </div>
             </div>
           ))}
