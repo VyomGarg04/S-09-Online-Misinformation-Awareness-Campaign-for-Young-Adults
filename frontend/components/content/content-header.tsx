@@ -1,14 +1,19 @@
 "use client";
 
-import { Plus, Database } from "lucide-react";
+import { Plus, Database, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ContentHeaderProps {
   onAddClick: () => void;
+  onBatchClick?: () => void;
   totalCount?: number;
 }
 
-export function ContentHeader({ onAddClick, totalCount }: ContentHeaderProps) {
+export function ContentHeader({
+  onAddClick,
+  onBatchClick,
+  totalCount,
+}: ContentHeaderProps) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b pb-6">
       <div>
@@ -27,13 +32,27 @@ export function ContentHeader({ onAddClick, totalCount }: ContentHeaderProps) {
           Manage submitted content, monitor fact-checking statuses, and trigger AI credibility analysis.
         </p>
       </div>
-      <Button
-        onClick={onAddClick}
-        className="bg-amber-700 hover:bg-amber-800 text-white dark:bg-amber-600 dark:hover:bg-amber-700 shadow-sm"
-      >
-        <Plus className="mr-2 h-4 w-4" />
-        Add Content
-      </Button>
+
+      <div className="flex items-center gap-2">
+        {onBatchClick && (
+          <Button
+            variant="outline"
+            onClick={onBatchClick}
+            className="text-xs font-semibold gap-1.5"
+          >
+            <Layers className="h-4 w-4 text-amber-600" />
+            Batch Import
+          </Button>
+        )}
+
+        <Button
+          onClick={onAddClick}
+          className="bg-amber-700 hover:bg-amber-800 text-white dark:bg-amber-600 dark:hover:bg-amber-700 shadow-sm text-xs font-semibold"
+        >
+          <Plus className="mr-1.5 h-4 w-4" />
+          Add Content
+        </Button>
+      </div>
     </div>
   );
 }

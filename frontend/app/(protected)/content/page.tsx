@@ -9,6 +9,7 @@ import { ContentFilters } from "@/components/content/content-filters";
 import { ContentTable } from "@/components/content/content-table";
 import { ContentDialog } from "@/components/content/content-dialog";
 import { ContentDetailModal } from "@/components/content/content-detail-modal";
+import { BatchImportModal } from "@/components/content/batch-import-modal";
 import {
   Dialog,
   DialogContent,
@@ -44,6 +45,7 @@ export default function ContentPage() {
 
   // Dialog & Modal states
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isBatchOpen, setIsBatchOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<ContentItem | null>(null);
   const [detailItem, setDetailItem] = useState<ContentItem | null>(null);
   const [deletingItem, setDeletingItem] = useState<ContentItem | null>(null);
@@ -180,7 +182,11 @@ export default function ContentPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <ContentHeader onAddClick={handleOpenAdd} totalCount={items.length} />
+      <ContentHeader
+        onAddClick={handleOpenAdd}
+        onBatchClick={() => setIsBatchOpen(true)}
+        totalCount={items.length}
+      />
 
       {/* Filters Bar */}
       <ContentFilters
@@ -244,6 +250,13 @@ export default function ContentPage() {
         onSubmit={handleSaveContent}
         initialData={editingItem}
         isLoading={isSaving}
+      />
+
+      {/* Batch Import Modal */}
+      <BatchImportModal
+        open={isBatchOpen}
+        onOpenChange={setIsBatchOpen}
+        onSuccess={fetchItems}
       />
 
       {/* Detail Viewer Modal */}
