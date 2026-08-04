@@ -10,14 +10,16 @@ import {
   Copy,
   Check,
   ArrowLeft,
-  ExternalLink,
   BookOpen,
   FileCheck2,
+  Printer,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { AnalysisResponse } from "@/types/analysis";
 import { ContentItem, FactCheckStatus } from "@/types/content";
+import { DeepfakeInspector } from "@/components/analysis/deepfake-inspector";
+import { ReportExportModal } from "@/components/analysis/report-export-modal";
 
 interface AnalysisResultViewProps {
   contentItem: ContentItem;
@@ -35,6 +37,7 @@ export function AnalysisResultView({
   isReanalyzing,
 }: AnalysisResultViewProps) {
   const [copied, setCopied] = useState(false);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
   const score = Math.round(analysis.credibility_score);
   const status = analysis.fact_check_status;
@@ -54,7 +57,7 @@ Explanation: ${analysis.explanation}`;
   return (
     <div className="space-y-6">
       {/* Navigation Top Bar */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <Button
           variant="outline"
           size="sm"
@@ -69,6 +72,16 @@ Explanation: ${analysis.explanation}`;
           <Button
             variant="outline"
             size="sm"
+            onClick={() => setIsExportModalOpen(true)}
+            className="text-xs gap-1.5 bg-amber-500/10 text-amber-800 dark:text-amber-300 border-amber-500/30 hover:bg-amber-500/20 font-semibold"
+          >
+            <Printer className="h-3.5 w-3.5" />
+            Export Official Report
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
             onClick={handleCopy}
             className="text-xs gap-1.5"
           >
@@ -80,7 +93,7 @@ Explanation: ${analysis.explanation}`;
             ) : (
               <>
                 <Copy className="h-3.5 w-3.5" />
-                Copy Report
+                Copy Text
               </>
             )}
           </Button>
@@ -93,7 +106,7 @@ Explanation: ${analysis.explanation}`;
             className="text-xs gap-1.5 bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 hover:bg-amber-200"
           >
             <RotateCw className={`h-3.5 w-3.5 ${isReanalyzing ? "animate-spin" : ""}`} />
-            {isReanalyzing ? "Re-analyzing..." : "Re-analyze with AI"}
+            {isReanalyzing ? "Re-analyzing..." : "Re-analyze"}
           </Button>
         </div>
       </div>
@@ -196,6 +209,17 @@ Explanation: ${analysis.explanation}`;
           </div>
         </div>
       </div>
+
+      {/* Deepfake & Forensic Media Inspector */}
+      <DeepfakeInspector />
+
+      {/* Report Printable Export Modal */}
+      <ReportExportModal
+        open={isExportModalOpen}
+        onOpenChange={setIsExportModalOpen}
+        contentItem={contentItem}
+        analysis={analysis}
+      />
     </div>
   );
 }
