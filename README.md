@@ -1,86 +1,80 @@
 # 🛡️ MediaShield — Digital Media Literacy & AI Fact-Checking Platform
 
-> **MediaShield** is a modern, enterprise-grade digital media verification platform designed to fight online misinformation. It empowers users, journalists, and researchers with AI-driven claim credibility scoring, misinformation trend tracking, news domain trust analytics, and media literacy resources.
+> **MediaShield** is a state-of-the-art digital media verification ecosystem designed to combat online misinformation. It equips users, researchers, and media professionals with AI-driven credibility scoring, live web URL article extraction, misinformation trend analytics, source reliability indexing, HTML5 Canvas forensic media inspection, and interactive literacy education.
 
 ---
 
-## 🌟 Key Features
+## 🚀 Highlights & Key Features
 
-- **⚡ AI Credibility Analysis Engine**: Paste URLs, raw claim text, or upload claim screenshots to receive instant credibility scores, evidence breakdowns, and factual verifications.
-- **📊 Real-time Misinformation Dashboard**: Overview of total content items, verified accurate claims, pending analyses, and flagged misleading content with live updates.
-- **📁 Content Library & Verification Hub**: Full CRUD management of news articles, social posts, WhatsApp forwards, and video transcripts with dynamic sorting (Date, Credibility, Title) and filters.
-- **🛡️ Source Integrity & Bias Index**: Evaluate major media domain reliability ratings, factual accuracy track records, and political spectrum metrics.
-- **📈 Information Journey & Misinformation Analytics**: Visualize claim mutation patterns, channel contagion density, and viral spread velocity across digital media.
-- **🎓 Media Literacy & Verification Hub**: Interactive guides on reverse image lookup, deepfake analysis, source cross-checking, and interactive verification practice.
-- **📱 Fully Responsive Experience**: Optimized for viewports at 1440px (Desktop), 1024px (Laptop), 768px (Tablet), and 390px (Mobile) with slide-over drawer navigation.
-- **🌓 Intentional Dark & Light Themes**: Cohesive, accessible color system built with Tailwind CSS design tokens and smooth micro-animations.
+- **🤖 AI Credibility Engine**: Submit URLs, news headlines, raw claim text, or screenshots to receive instant credibility scores, evidence breakdowns, and factual verifications.
+- **📰 Live Web URL Extraction**: Automatically scrapes live web headlines, article descriptions, and domain metadata via backend `httpx` parsing to provide real, contextual article summaries.
+- **🔬 HTML5 Canvas Forensic Inspector**: Performs dynamic pixel error level analysis (ELA), compression artifact detection, and live RGB noise reticle inspection to detect photoshopped or AI-generated media.
+- **📊 Real-time Workspace Dashboard**: Live stats cards, skeleton loaders, retry error handling, "Last updated" relative timestamp, and theme distribution analytics.
+- **📁 Content Library & Filtering**: Full CRUD management of news articles, social posts, WhatsApp forwards, and video transcripts with dynamic sorting (Date, Credibility, Title) and pagination.
+- **🛡️ Source Integrity & Bias Index**: Evaluate domain reliability ratings, factual accuracy records, and political spectrum metrics for major media outlets.
+- **📈 Misinformation Journey Analytics**: Monitor viral contagion density, channel spread velocity, and claim mutation lifecycles.
+- **💬 AI Social Debunking Generator**: Generate shareable counter-fact responses with integrated claim summaries for WhatsApp, X (Twitter) threads, and custom social graphics.
+- **📱 Fully Responsive & Dark/Light Themes**: Pixel-perfect layout across 1440px (Desktop), 1024px (Laptop), 768px (Tablet), and 390px (Mobile) with slide-over drawer navigation and theme switcher.
 
 ---
 
 ## 🛠️ Technology Stack
 
-### Frontend
-- **Framework**: Next.js 16 (App Router, Server & Client Components)
-- **Library**: React 19, TypeScript
-- **Styling**: Tailwind CSS v4, Base UI / Shadcn UI
-- **State & Theme**: `next-themes` (Dark/Light mode support)
-- **Toast Notifications**: `sonner`
-- **Icons**: `lucide-react`
-- **Validation**: `zod` & `react-hook-form`
-
-### Backend
-- **Framework**: Python 3.12, FastAPI, Uvicorn
-- **ORM & DB**: SQLAlchemy, Alembic, SQLite / PostgreSQL
-- **Security & Auth**: OAuth2 / Bearer JWT tokens with `passlib` bcrypt hashing
-- **Testing**: `pytest`, `httpx`
+| Layer | Technologies Used |
+| :--- | :--- |
+| **Frontend** | Next.js 16 (App Router, Server & Client Components), React 19, TypeScript, Tailwind CSS v4, Base UI / Shadcn UI |
+| **State & UI** | `next-themes` (Dark/Light Mode), `sonner` (Toast Notifications), `lucide-react` (Icons) |
+| **Forms & Validation** | `react-hook-form`, `zod` schema validation |
+| **Backend** | Python 3.12, FastAPI, Uvicorn, SQLAlchemy ORM, Alembic Migrations |
+| **AI & Scraping** | Google Gemini 2.0 Flash API, `httpx` async HTML parser |
+| **Security** | OAuth2 Bearer JWT tokens, `passlib` (bcrypt password hashing) |
+| **Database** | SQLite (Development) / PostgreSQL (Production) |
 
 ---
 
-## 📁 Folder Structure
+## 📁 Repository Structure
 
 ```
 media-shield/
 ├── backend/
 │   ├── app/
-│   │   ├── api/            # API endpoints (auth, content, ai, dashboard)
-│   │   ├── core/           # Security, auth, config settings
-│   │   ├── db/             # SQLAlchemy session & base setup
-│   │   ├── models/         # Database models (User, ContentItem, Analysis)
+│   │   ├── ai/             # Gemini AI prompt engine, fallback heuristics & live URL scraper
+│   │   ├── api/v1/         # FastAPI endpoints (auth, content, ai, dashboard, health)
+│   │   ├── core/           # Security, config & CORS middleware
+│   │   ├── database/       # SQLAlchemy models, enums & session builder
+│   │   ├── repositories/   # Data access queries & statistics aggregations
 │   │   ├── schemas/        # Pydantic validation schemas
-│   │   └── services/       # AI analysis engine & business logic
-│   ├── alembic/            # Database migration scripts
-│   └── tests/              # Pytest backend test suite
+│   │   └── services/       # Business logic (analysis_service, content_service, auth_service)
+│   ├── alembic/            # Database schema migration scripts
+│   └── README.md           # Backend documentation & API setup guide
 │
 ├── frontend/
 │   ├── app/
-│   │   ├── (auth)/         # Login & Registration pages
+│   │   ├── (auth)/         # Login & Registration route pages
 │   │   ├── (protected)/    # Dashboard, Analysis, Content, Trends, Sources, Resources, Profile
 │   │   ├── layout.tsx      # Root layout with ThemeProvider & Toaster
 │   │   └── page.tsx        # Landing Page (Hero, Features, How It Works, CTA, Footer)
 │   ├── components/
-│   │   ├── ai/             # AI breakdown & feedback components
-│   │   ├── analysis/       # AI Analysis forms, results & history panel
+│   │   ├── ai/             # AI feedback components
+│   │   ├── analysis/       # AI Analysis forms, results view, Deepfake Inspector & Debunking generator
 │   │   ├── auth/           # Login & Register form components
 │   │   ├── content/        # Content table, dialogs, filters & detail modals
 │   │   ├── dashboard/      # Welcome banner, stats cards & recent activity
 │   │   ├── landing/        # Public landing page sections
 │   │   ├── layout/         # AppShell, Navbar, Sidebar & Mobile Drawer
-│   │   └── ui/             # Reusable UI primitives (Button, Table, Dialog, Skeleton, etc.)
-│   ├── lib/                # API fetch helpers & auth token manager
-│   ├── services/           # Frontend service modules (auth, content, ai, dashboard)
-│   └── types/              # TypeScript interface definitions
+│   │   └── ui/             # Reusable UI primitives (Button, Table, Dialog, Skeleton)
+│   ├── lib/                # API fetch helper with NetworkError shield & auth token manager
+│   ├── services/           # Frontend API services (auth, content, ai, dashboard)
+│   └── README.md           # Frontend architecture & component guide
+│
+└── docs/                   # System design, dev logs & architecture documentation
 ```
 
 ---
 
-## 🚀 Getting Started
+## ⚡ Quick Start Guide
 
-### Prerequisites
-- Node.js (v18.0 or higher)
-- Python (v3.11 or higher)
-- `npm` or `pnpm`
-
-### Environment Variables Setup
+### 1. Environment Configuration
 
 #### Frontend (`frontend/.env.local`):
 ```env
@@ -91,16 +85,17 @@ NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
 ```env
 PROJECT_NAME=MediaShield
 API_V1_STR=/api/v1
-SECRET_KEY=your-secret-key-change-in-production
+SECRET_KEY=your-secret-key-here
 ACCESS_TOKEN_EXPIRE_MINUTES=11520
 DATABASE_URL=sqlite:///./sql_app.db
+GEMINI_API_KEY=your-gemini-api-key-optional
 ```
 
 ---
 
-## ⚡ Installation & Local Execution
+### 2. Running the Application
 
-### 1. Backend Setup
+#### Step 1: Start Backend (FastAPI)
 ```bash
 cd backend
 python -m venv .venv
@@ -109,32 +104,30 @@ pip install -r requirements.txt  # Or uv sync
 alembic upgrade head
 uvicorn app.main:app --reload --port 8000
 ```
-Backend API interactive docs will be available at [http://localhost:8000/docs](http://localhost:8000/docs).
+Interactive API Swagger Docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 
-### 2. Frontend Setup
+#### Step 2: Start Frontend (Next.js)
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open Workspace: [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## 🎬 Recommended Demo Sequence
+## 🎬 Recommended Presentation Demo Flow
 
-For testing or presentation demos, follow this smooth workflow:
-
-1. **Landing Page (`/`)**: Overview of problem statement, features, interactive flow, and CTA.
-2. **Register (`/register`)**: Create a new account with instant validation & toast feedback.
-3. **Login (`/login`)**: Authenticate into the protected workspace.
-4. **Dashboard (`/dashboard`)**: View real-time stats cards with skeletons, last updated badge, and quick action shortcuts.
-5. **AI Analysis (`/analysis`)**: Submit a news link or text claim to run AI Credibility scoring, examine evidence breakdowns, and view recent analysis history.
-6. **Content Library (`/content`)**: Filter articles by type or status, sort by Date / Credibility, view details, edit items, or create a new article.
-7. **Source Index (`/sources`)**: Inspect domain reliability metrics and factual accuracy records.
-8. **Literacy Hub (`/resources`)**: Review verification guides and test skills with the interactive claim quiz.
-9. **User Profile (`/profile`)**: Manage profile settings and view account stats.
-10. **Logout**: Safely sign out with session token cleanup and toast confirmation.
+1. **Landing Page (`/`)**: Feature overview, interactive claims preview, and CTA.
+2. **Register (`/register`)**: Create account with instant validation and toast feedback.
+3. **Login (`/login`)**: Authenticate into the workspace shell.
+4. **Dashboard (`/dashboard`)**: View real-time stats cards with skeletons, last updated badge, and theme distribution.
+5. **AI Analysis (`/analysis`)**: Paste a news URL or text claim to run AI Credibility scoring, inspect live web article summaries, test HTML5 Canvas media forensics, and review recent analysis history.
+6. **Content Library (`/content`)**: Filter by type/status, sort dynamically by Date or Credibility, view item details, or edit articles.
+7. **Source Index (`/sources`)**: Inspect news domain reliability scores and factual accuracy records.
+8. **Literacy Hub (`/resources`)**: Explore verification guides and practice claim evaluation.
+9. **User Profile (`/profile`)**: Review profile settings and statistics.
+10. **Logout**: Safely end session with token removal and toast confirmation.
 
 ---
 
