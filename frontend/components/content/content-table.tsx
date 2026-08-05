@@ -62,30 +62,30 @@ export function ContentTable({
         <Table>
           <TableHeader className="bg-muted/40">
             <TableRow>
-              <TableHead className="w-[300px]">Title & Details</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Credibility</TableHead>
-              <TableHead>Source / Author</TableHead>
-              <TableHead>Created</TableHead>
+              <TableHead className="w-[320px]">Title & Details</TableHead>
+              <TableHead className="w-[110px]">Type</TableHead>
+              <TableHead className="w-[130px]">Status</TableHead>
+              <TableHead className="w-[100px]">Credibility</TableHead>
+              <TableHead className="w-[160px]">Source / Author</TableHead>
+              <TableHead className="w-[110px]">Created</TableHead>
               <TableHead className="w-[60px] text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {Array.from({ length: 5 }).map((_, idx) => (
               <TableRow key={idx}>
-                <TableCell>
+                <TableCell className="w-[320px]">
                   <div className="space-y-2">
                     <Skeleton className="h-4 w-48" />
                     <Skeleton className="h-3 w-32" />
                   </div>
                 </TableCell>
-                <TableCell><Skeleton className="h-5 w-16 rounded-full" /></TableCell>
-                <TableCell><Skeleton className="h-5 w-20 rounded-full" /></TableCell>
-                <TableCell><Skeleton className="h-4 w-12" /></TableCell>
-                <TableCell><Skeleton className="h-4 w-24" /></TableCell>
-                <TableCell><Skeleton className="h-4 w-20" /></TableCell>
-                <TableCell className="text-right"><Skeleton className="h-8 w-8 ml-auto rounded-lg" /></TableCell>
+                <TableCell className="w-[110px]"><Skeleton className="h-5 w-16 rounded-full" /></TableCell>
+                <TableCell className="w-[130px]"><Skeleton className="h-5 w-20 rounded-full" /></TableCell>
+                <TableCell className="w-[100px]"><Skeleton className="h-4 w-12" /></TableCell>
+                <TableCell className="w-[160px]"><Skeleton className="h-4 w-24" /></TableCell>
+                <TableCell className="w-[110px]"><Skeleton className="h-4 w-20" /></TableCell>
+                <TableCell className="w-[60px] text-right"><Skeleton className="h-8 w-8 ml-auto rounded-lg" /></TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -121,35 +121,36 @@ export function ContentTable({
   return (
     <div className="rounded-xl border bg-card overflow-hidden shadow-xs">
       <div className="overflow-x-auto">
-        <Table className="min-w-[700px]">
+        <Table className="min-w-[850px] table-fixed w-full">
           <TableHeader className="bg-muted/40">
             <TableRow>
-              <TableHead className="w-[300px]">Title & Details</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Credibility</TableHead>
-              <TableHead>Source / Author</TableHead>
-              <TableHead>Created</TableHead>
+              <TableHead className="w-[320px] min-w-[300px]">Title & Details</TableHead>
+              <TableHead className="w-[110px]">Type</TableHead>
+              <TableHead className="w-[130px]">Status</TableHead>
+              <TableHead className="w-[100px]">Credibility</TableHead>
+              <TableHead className="w-[160px]">Source / Author</TableHead>
+              <TableHead className="w-[110px]">Created</TableHead>
               <TableHead className="w-[60px] text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {items.map((item) => (
               <TableRow key={item.id} className="hover:bg-muted/30 transition-colors">
-                {/* Title & Preview */}
-                <TableCell className="font-medium">
-                  <div className="space-y-1 max-w-[280px]">
+                {/* Title & Preview Cell with Strict Max Width and Truncate */}
+                <TableCell className="w-[320px] max-w-[320px] align-top py-3">
+                  <div className="space-y-1 w-full overflow-hidden">
                     <button
                       onClick={() => onView(item)}
-                      className="font-semibold text-foreground hover:text-amber-600 dark:hover:text-amber-400 text-left line-clamp-1 transition-colors"
+                      title={item.title}
+                      className="block w-full text-left font-semibold text-foreground hover:text-amber-600 dark:hover:text-amber-400 truncate text-sm transition-colors"
                     >
                       {item.title}
                     </button>
-                    <p className="text-xs text-muted-foreground line-clamp-1">
+                    <p className="text-xs text-muted-foreground truncate w-full" title={item.content}>
                       {item.content}
                     </p>
                     {item.theme && (
-                      <span className="inline-block px-2 py-0.5 rounded text-[10px] font-medium bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300">
+                      <span className="inline-block max-w-full truncate px-2 py-0.5 rounded text-[10px] font-medium bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300">
                         {item.theme} {item.subtheme ? `• ${item.subtheme}` : ""}
                       </span>
                     )}
@@ -157,19 +158,19 @@ export function ContentTable({
                 </TableCell>
 
                 {/* Type */}
-                <TableCell>
-                  <Badge variant="outline" className="text-xs font-mono">
+                <TableCell className="w-[110px] align-top py-3">
+                  <Badge variant="outline" className="text-xs font-mono whitespace-nowrap">
                     {item.content_type.replace("_", " ")}
                   </Badge>
                 </TableCell>
 
                 {/* Fact Check Status Badge */}
-                <TableCell>
+                <TableCell className="w-[130px] align-top py-3">
                   <StatusBadge status={item.fact_check_status} />
                 </TableCell>
 
                 {/* Credibility Score */}
-                <TableCell>
+                <TableCell className="w-[100px] align-top py-3">
                   {item.credibility_score !== null && item.credibility_score !== undefined ? (
                     <div className="flex items-center gap-1.5 font-bold text-sm">
                       <span className={getCredibilityColor(item.credibility_score)}>
@@ -182,24 +183,29 @@ export function ContentTable({
                 </TableCell>
 
                 {/* Author / Source */}
-                <TableCell className="text-xs text-muted-foreground">
-                  {item.source ? (
-                    <a
-                      href={item.source.startsWith("http") ? item.source : `https://${item.source}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center gap-1 text-amber-700 dark:text-amber-400 hover:underline max-w-[140px] truncate"
-                    >
-                      <span className="truncate">{item.author || item.source}</span>
-                      <ExternalLink className="h-3 w-3 flex-shrink-0" />
-                    </a>
-                  ) : (
-                    <span>{item.author || "—"}</span>
-                  )}
+                <TableCell className="w-[160px] max-w-[160px] align-top py-3">
+                  <div className="w-full overflow-hidden">
+                    {item.source ? (
+                      <a
+                        href={item.source.startsWith("http") ? item.source : `https://${item.source}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        title={item.source}
+                        className="flex items-center gap-1 text-amber-700 dark:text-amber-400 hover:underline max-w-full truncate text-xs"
+                      >
+                        <span className="truncate">{item.author || item.source}</span>
+                        <ExternalLink className="h-3 w-3 shrink-0" />
+                      </a>
+                    ) : (
+                      <span className="text-xs text-muted-foreground truncate block max-w-full">
+                        {item.author || "—"}
+                      </span>
+                    )}
+                  </div>
                 </TableCell>
 
                 {/* Date */}
-                <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
+                <TableCell className="w-[110px] align-top py-3 text-xs text-muted-foreground whitespace-nowrap">
                   {new Date(item.created_at).toLocaleDateString("en-US", {
                     month: "short",
                     day: "numeric",
@@ -208,7 +214,7 @@ export function ContentTable({
                 </TableCell>
 
                 {/* Actions Dropdown */}
-                <TableCell className="text-right">
+                <TableCell className="w-[60px] align-top py-3 text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger className="inline-flex size-8 items-center justify-center rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
                       <MoreVertical className="h-4 w-4" />
@@ -252,35 +258,35 @@ function StatusBadge({ status }: { status: FactCheckStatus }) {
   switch (upperStatus) {
     case "VERIFIED":
       return (
-        <Badge className="bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 border-emerald-200 dark:border-emerald-800 gap-1">
+        <Badge className="bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 border-emerald-200 dark:border-emerald-800 gap-1 whitespace-nowrap">
           <ShieldCheck className="h-3 w-3" />
           Verified
         </Badge>
       );
     case "MISLEADING":
       return (
-        <Badge className="bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 hover:bg-amber-100 border-amber-200 dark:border-amber-800 gap-1">
+        <Badge className="bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 hover:bg-amber-100 border-amber-200 dark:border-amber-800 gap-1 whitespace-nowrap">
           <AlertTriangle className="h-3 w-3" />
           Misleading
         </Badge>
       );
     case "FALSE":
       return (
-        <Badge className="bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300 hover:bg-rose-100 border-rose-200 dark:border-rose-800 gap-1">
+        <Badge className="bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300 hover:bg-rose-100 border-rose-200 dark:border-rose-800 gap-1 whitespace-nowrap">
           <AlertOctagon className="h-3 w-3" />
           False
         </Badge>
       );
     case "UNVERIFIABLE":
       return (
-        <Badge className="bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 hover:bg-purple-100 border-purple-200 dark:border-purple-800 gap-1">
+        <Badge className="bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 hover:bg-purple-100 border-purple-200 dark:border-purple-800 gap-1 whitespace-nowrap">
           <HelpCircle className="h-3 w-3" />
           Unverifiable
         </Badge>
       );
     default:
       return (
-        <Badge variant="secondary" className="gap-1">
+        <Badge variant="secondary" className="gap-1 whitespace-nowrap">
           <Clock className="h-3 w-3 text-muted-foreground" />
           Pending
         </Badge>

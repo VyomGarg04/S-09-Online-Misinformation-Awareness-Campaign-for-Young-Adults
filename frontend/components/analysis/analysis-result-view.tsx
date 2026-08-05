@@ -212,11 +212,23 @@ Explanation: ${analysis.explanation}`;
                   {score >= 80 ? "High Integrity / Verified" : score >= 50 ? "Moderate Caution" : "High Risk / False"}
                 </span>
               </div>
-              <div>
+              <div className="min-w-0 overflow-hidden">
                 <span className="text-muted-foreground block">Source Attribution:</span>
-                <span className="font-semibold text-foreground truncate">
-                  {contentItem.source || contentItem.author || "User Submitted"}
-                </span>
+                {contentItem.source ? (
+                  <a
+                    href={contentItem.source.startsWith("http") ? contentItem.source : `https://${contentItem.source}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={contentItem.source}
+                    className="font-semibold text-amber-700 dark:text-amber-400 hover:underline block truncate max-w-full text-xs"
+                  >
+                    {contentItem.source}
+                  </a>
+                ) : (
+                  <span className="font-semibold text-foreground block truncate max-w-full text-xs">
+                    {contentItem.author || "User Submitted"}
+                  </span>
+                )}
               </div>
             </div>
           </div>
