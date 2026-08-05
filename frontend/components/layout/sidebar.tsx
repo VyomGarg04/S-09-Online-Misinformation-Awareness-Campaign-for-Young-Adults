@@ -14,7 +14,7 @@ import {
 import { Logo } from "@/components/branding";
 import { cn } from "@/lib/utils";
 
-const navigation = [
+export const navigation = [
   {
     name: "Dashboard",
     href: "/dashboard",
@@ -71,10 +71,10 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-xl px-4 py-3 transition-colors text-sm font-medium",
+                "flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 text-sm font-medium",
                 isActive
                   ? "bg-amber-700 text-white dark:bg-amber-600 font-semibold shadow-xs"
-                  : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                  : "hover:bg-muted text-muted-foreground hover:text-foreground hover:translate-x-1"
               )}
             >
               <Icon className="h-5 w-5" />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -42,6 +42,7 @@ export default function ContentPage() {
   const [contentType, setContentType] = useState("ALL");
   const [status, setStatus] = useState("ALL");
   const [theme, setTheme] = useState("");
+  const [sortBy, setSortBy] = useState("created_at_desc");
 
   // Dialog & Modal states
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -84,6 +85,25 @@ export default function ContentPage() {
     fetchItems();
   }, [fetchItems]);
 
+  // Client-side dynamic sorting
+  const sortedItems = useMemo(() => {
+    const copy = [...items];
+    switch (sortBy) {
+      case "created_at_asc":
+        return copy.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+      case "created_at_desc":
+        return copy.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      case "credibility_desc":
+        return copy.sort((a, b) => (b.credibility_score ?? -1) - (a.credibility_score ?? -1));
+      case "credibility_asc":
+        return copy.sort((a, b) => (a.credibility_score ?? 999) - (b.credibility_score ?? 999));
+      case "title_asc":
+        return copy.sort((a, b) => a.title.localeCompare(b.title));
+      default:
+        return copy;
+    }
+  }, [items, sortBy]);
+
   // Reset page when filters change
   const handleSearchChange = (val: string) => {
     setSearch(val);
@@ -110,6 +130,7 @@ export default function ContentPage() {
     setContentType("ALL");
     setStatus("ALL");
     setTheme("");
+    setSortBy("created_at_desc");
     setPage(1);
   };
 
@@ -179,6 +200,8 @@ export default function ContentPage() {
     router.push(`/analysis?id=${item.id}`);
   };
 
+  const hasActiveFilters = Boolean(search || (contentType && contentType !== "ALL") || (status && status !== "ALL") || theme);
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -198,17 +221,21 @@ export default function ContentPage() {
         onStatusChange={handleStatusChange}
         theme={theme}
         onThemeChange={handleThemeChange}
+        sortBy={sortBy}
+        onSortByChange={setSortBy}
         onReset={handleResetFilters}
       />
 
       {/* Table */}
       <ContentTable
-        items={items}
+        items={sortedItems}
         isLoading={isLoading}
         onView={handleViewDetails}
         onAnalyze={handleAnalyze}
         onEdit={handleOpenEdit}
         onDelete={(item) => setDeletingItem(item)}
+        onAddClick={handleOpenAdd}
+        hasFilters={hasActiveFilters}
       />
 
       {/* Simple Pagination Footer */}
