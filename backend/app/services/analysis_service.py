@@ -1,6 +1,7 @@
+import re
 from sqlalchemy.orm import Session
 
-from app.ai.gemini import analyze
+from app.ai.gemini import analyze, fetch_url_metadata
 from app.ai.parser import parse_analysis_response
 from app.database.enums import FactCheckStatus
 from app.database.models.content import Content
@@ -16,8 +17,24 @@ def perform_analysis(
     db: Session,
     content: Content,
 ) -> AnalysisResponse:
+    # If content item has a URL or generic title, enrich it with live web page metadata
+    url_to_fetch = content.source if content.source and content.source.startswith("http") else None
+    if not url_to_fetch:
+        urls = re.findall(r'https?://[^\s]+', content.content)
+        if urls:
+            url_to_fetch = urls[0]
 
-    ai_response = analyze(content.content)
+    if url_to_fetch:
+        meta = fetch_url_metadata(url_to_fetch)
+        if meta.get("title"):
+            if not content.title or content.title.startswith("Analysis of") or content.title.startswith("Article from"):
+                content.title = meta["title"]
+        if meta.get("description"):
+            if content.content.startswith("URL submitted"):
+                content.content = f"Article Summary ({url_to_fetch}): {meta['description']}"
+        db.commit()
+
+    ai_response = analyze(f"Title: {content.title}\nContent: {content.content}\nSource: {content.source or 'None'}")
     analysis = parse_analysis_response(ai_response)
 
     updated_content = update_content_analysis(
@@ -34,7 +51,6 @@ def perform_analysis(
         explanation=updated_content.analysis_summary,
         analyzed_at=updated_content.analyzed_at,
     )
-
 
 
 def analyze_content(
