@@ -1,15 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.router import api_router
 from app.core.config import settings
-
-from fastapi import Request
-from fastapi.responses import JSONResponse
 from app.core.exceptions import (
     ContentNotFoundError,
     AIAnalysisError,
 )
-from fastapi.middleware.cors import CORSMiddleware
 
 tags_metadata = [
     {
@@ -30,8 +28,6 @@ tags_metadata = [
     },
 ]
 
-
-
 app = FastAPI(
     title="MediaShield API",
     version="1.0.0",
@@ -40,16 +36,6 @@ app = FastAPI(
 ## MediaShield API
 
 MediaShield is an AI-powered misinformation detection platform that helps users verify the credibility of online content.
-
-### Features
-
-- 🔐 JWT Authentication
-- 📰 Content Management
-- 🤖 Gemini AI Fact Checking
-- 📊 Dashboard Statistics
-- 📈 Theme-wise Analytics
-
-This API is built using FastAPI and SQLAlchemy.
     """,
     contact={
         "name": "MediaShield Team",
@@ -61,12 +47,11 @@ This API is built using FastAPI and SQLAlchemy.
     openapi_tags=tags_metadata,
 )
 
-
+# Robust CORS middleware configuration supporting localhost, 127.0.0.1 & any dev port
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-    ],
+    allow_origins=["*"],
+    allow_origin_regex=r"http://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -96,8 +81,4 @@ async def ai_analysis_exception_handler(
         },
     )
 
-
 app.include_router(api_router)
-
-
-

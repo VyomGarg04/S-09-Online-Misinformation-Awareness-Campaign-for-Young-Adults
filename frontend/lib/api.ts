@@ -18,10 +18,18 @@ export async function apiFetch<T>(
     headers.set("Authorization", `Bearer ${token}`);
   }
 
-  const response = await fetch(`${API_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}${endpoint}`, {
+      ...options,
+      headers,
+    });
+  } catch (err: any) {
+    console.error("Network fetch failed:", err);
+    throw new Error(
+      "Network connection error. Unable to communicate with MediaShield backend. Please check backend server status."
+    );
+  }
 
   const data = await response.json().catch(() => null);
 
@@ -32,7 +40,7 @@ export async function apiFetch<T>(
         window.location.href = "/login";
       }
     }
-    throw new Error(data?.detail ?? "Something went wrong");
+    throw new Error(data?.detail ?? "Something went wrong during API request");
   }
 
   return data as T;
