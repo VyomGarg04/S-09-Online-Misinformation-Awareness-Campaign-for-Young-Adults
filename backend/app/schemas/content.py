@@ -29,6 +29,7 @@ class ContentCreate(BaseModel):
             }
         }
     )
+
 # Response returned from API
 class ContentResponse(BaseModel):
     id: int
@@ -105,7 +106,7 @@ class DashboardStatistics(BaseModel):
     )
 
 class ThemeStatistic(BaseModel):
-    theme: str
+    theme: str = "General"
     count: int
 
     model_config = ConfigDict(

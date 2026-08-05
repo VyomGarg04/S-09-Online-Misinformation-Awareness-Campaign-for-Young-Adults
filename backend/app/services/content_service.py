@@ -112,14 +112,14 @@ def get_dashboard_statistics(db: Session) -> dict:
 
     return response
 
-def get_theme_statistics(db: Session, ) -> dict:
+def get_theme_statistics(db: Session) -> list:
     stats = get_theme_statistics_repo(db)
     response = []
     for theme, count in stats:
         response.append(
             {
-                "theme" : theme,
-                "count" : count
+                "theme": theme or "General",
+                "count": count
             }
         )
     return response
