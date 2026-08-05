@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Share2, MessageSquare, Copy, Check, Sparkles, Send, FileText } from "lucide-react";
+import { Share2, MessageSquare, Copy, Check, Sparkles, Send, FileText, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ContentItem } from "@/types/content";
@@ -158,38 +158,57 @@ EVIDENCE AUDIT: ${analysis.explanation.slice(0, 160)}... #FactCheck #MediaShield
           </div>
         </div>
       ) : (
-        /* Graphic Card Preview */
-        <div className="p-6 rounded-2xl bg-gradient-to-br from-neutral-900 via-amber-950 to-neutral-950 text-white border shadow-lg space-y-4 max-w-md mx-auto">
+        /* Redesigned Graphic Card Preview */
+        <div className="w-full max-w-md mx-auto rounded-2xl bg-slate-950 p-6 text-white border border-amber-500/30 shadow-2xl space-y-4 overflow-hidden">
+          {/* Card Header */}
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
-            <span className="font-bold text-xs tracking-wider text-amber-400 uppercase">
-              MediaShield Fact Check
-            </span>
-            <Badge className="bg-amber-500/20 text-amber-200 border-amber-400/30 text-[10px]">
-              VERIFIED REPORT
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-amber-400" />
+              <span className="font-bold text-xs tracking-wider text-amber-400 uppercase">
+                MediaShield Fact Check
+              </span>
+            </div>
+            <Badge className="bg-amber-500/20 text-amber-300 border-amber-400/30 text-[10px] px-2 py-0.5">
+              OFFICIAL VERIFICATION
             </Badge>
           </div>
 
+          {/* Headline & Score */}
           <div className="space-y-2">
-            <h4 className="font-bold text-base text-white line-clamp-2">
+            <h4 className="font-extrabold text-base text-white leading-snug">
               &quot;{contentItem.title}&quot;
             </h4>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-black text-amber-400">{score}%</span>
-              <span className="text-xs text-white/80 font-semibold uppercase">
-                {analysis.fact_check_status}
+            <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
+              <div className="flex items-center gap-2">
+                <span className="text-3xl font-black text-amber-400">{score}%</span>
+                <span className="text-xs text-white/80 font-bold uppercase tracking-wider">
+                  {analysis.fact_check_status}
+                </span>
+              </div>
+              <span className="text-[11px] text-slate-400 font-mono">
+                {contentItem.source || "Web News"}
               </span>
             </div>
           </div>
 
-          <div className="p-2.5 rounded-lg bg-white/10 text-[11px] text-amber-100/90 leading-relaxed line-clamp-2 border border-white/10">
-            <strong>Summary:</strong> {articleSummary}
+          {/* Article Summary Box inside Card */}
+          <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-slate-200 leading-relaxed space-y-1">
+            <strong className="text-amber-300 block text-[11px] uppercase tracking-wider">
+              Article Content Summary:
+            </strong>
+            <p className="text-slate-200 text-xs leading-normal">
+              {articleSummary}
+            </p>
           </div>
 
-          <p className="text-xs text-amber-100/80 leading-relaxed line-clamp-2">
+          {/* Explanation Finding */}
+          <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-xs text-slate-300 leading-relaxed">
+            <strong className="text-white block text-[11px] mb-0.5">Fact Audit Finding:</strong>
             {analysis.explanation}
-          </p>
+          </div>
 
-          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] text-amber-200/60">
+          {/* Footer */}
+          <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[10px] text-slate-400 font-mono">
             <span>Verified via AI Credibility Engine</span>
             <span>mediashield.org</span>
           </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Cpu, Eye, Layers, RefreshCw, Upload, Crosshair, ZoomIn, ShieldCheck, Activity } from "lucide-react";
+import { Cpu, Eye, Layers, RefreshCw, Upload, Crosshair, ZoomIn, ShieldCheck, HelpCircle, Info, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -43,6 +43,7 @@ export function DeepfakeInspector() {
   const [isScanning, setIsScanning] = useState(false);
   const [customImage, setCustomImage] = useState<string | null>(null);
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
+  const [showExplanation, setShowExplanation] = useState(true);
 
   const currentSample = SAMPLE_IMAGES[selectedImageIndex];
   const activeImage = customImage || currentSample.url;
@@ -90,16 +91,28 @@ export function DeepfakeInspector() {
               </h3>
               <Badge variant="outline" className="text-[10px] gap-1 font-mono py-0 text-emerald-600 border-emerald-300">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Active Multi-Model Scanner
+                Active Scanner
               </Badge>
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Pixel manipulation, Error Level Analysis (ELA), and facial artifact detection.
+              Pixel manipulation, Error Level Analysis (ELA), and synthetic image detection.
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-auto">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowExplanation(!showExplanation)}
+            className="text-xs text-amber-700 dark:text-amber-400 gap-1"
+          >
+            <HelpCircle className="h-3.5 w-3.5" />
+            <span>{showExplanation ? "Hide Guide" : "Why Check Images?"}</span>
+            {showExplanation ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+          </Button>
+
           <label className="cursor-pointer inline-flex items-center justify-center rounded-lg border border-input bg-background hover:bg-muted text-foreground px-2.5 py-1.5 text-xs font-medium gap-1.5 transition-colors shadow-2xs">
             <input
               type="file"
@@ -123,6 +136,33 @@ export function DeepfakeInspector() {
           </Button>
         </div>
       </div>
+
+      {/* Explanatory Guide Box */}
+      {showExplanation && (
+        <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-foreground space-y-2 animate-in fade-in">
+          <div className="flex items-center gap-2 font-bold text-amber-800 dark:text-amber-300">
+            <Info className="h-4 w-4 shrink-0 text-amber-600" />
+            <span>What does the Deepfake & Media Forensic Inspector do?</span>
+          </div>
+          <p className="text-muted-foreground leading-relaxed">
+            Online misinformation often relies on <strong>edited photos, AI-generated images (DALL-E/Midjourney), or fake face swaps</strong> attached to real news headlines. This tool analyzes visual media alongside text claims to verify whether an image is authentic or synthesized.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 font-sans text-[11px]">
+            <div className="p-2 rounded bg-background/60 border">
+              <strong className="text-foreground block">1. Heatmap Overlay:</strong>
+              <span className="text-muted-foreground">Highlights compression shifts & edited hotspots.</span>
+            </div>
+            <div className="p-2 rounded bg-background/60 border">
+              <strong className="text-foreground block">2. ELA Error Analysis:</strong>
+              <span className="text-muted-foreground">Reveals re-saved photoshopped pixels.</span>
+            </div>
+            <div className="p-2 rounded bg-background/60 border">
+              <strong className="text-foreground block">3. Facial Risk & Noise:</strong>
+              <span className="text-muted-foreground">Detects AI face-swaps & synthetic noise.</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Frame Selection Dropdown & Controls */}
       <div className="flex flex-wrap items-center justify-between gap-3 text-xs">

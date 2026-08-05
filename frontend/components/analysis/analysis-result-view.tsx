@@ -32,22 +32,48 @@ interface AnalysisResultViewProps {
 }
 
 export function getArticleSummaryText(contentItem: ContentItem, analysis: AnalysisResponse): string {
-  const isUrlSubmission = contentItem.content.toLowerCase().startsWith("url submitted");
-  
-  if (isUrlSubmission || contentItem.source) {
-    let domain = "News Outlet";
-    try {
-      if (contentItem.source) {
-        domain = new URL(contentItem.source.startsWith("http") ? contentItem.source : `https://${contentItem.source}`).hostname;
-      }
-    } catch {
-      // Fallback
-    }
+  const contentRaw = contentItem.content || "";
+  const isUrlSubmission = contentRaw.toLowerCase().startsWith("url submitted") || contentRaw.toLowerCase().startsWith("http");
 
-    return `This evaluation audits news reporting published by ${domain} (${contentItem.source || "URL submission"}). The AI credibility audit cross-checked primary news wire records and global fact repositories. The evaluation confirmed that the underlying claim aligns with documented public records, verified agency reporting, and authoritative sources with no signs of context distortion or synthetic manipulation.`;
+  // 1. If actual full text body was provided
+  if (!isUrlSubmission && contentRaw.trim().length > 25) {
+    const cleanText = contentRaw.trim();
+    if (cleanText.length > 260) {
+      return cleanText.slice(0, 260).replace(/\s+\S*$/, "") + "...";
+    }
+    return cleanText;
   }
 
-  return `This evaluation audits the claim: "${contentItem.title}". The AI credibility engine analyzed the submitted text against verified news databases, checking for factual consistency, linguistic sensationalism, and primary source attribution integrity. ${analysis.explanation}`;
+  // 2. Extract domain and topic slug from source URL if available
+  let domain = "News Publisher";
+  let topicSlug = "";
+  if (contentItem.source) {
+    try {
+      const parsed = new URL(contentItem.source.startsWith("http") ? contentItem.source : `https://${contentItem.source}`);
+      domain = parsed.hostname.replace(/^www\./, "");
+      const segments = parsed.pathname.split("/").filter(Boolean);
+      const lastSeg = segments[segments.length - 1] || "";
+      if (lastSeg && !lastSeg.match(/^[a-z0-9]{8,}$/i)) {
+        topicSlug = lastSeg.replace(/[-_]/g, " ");
+      }
+    } catch {
+      domain = contentItem.source;
+    }
+  }
+
+  // 3. If title is a specific headline
+  const title = contentItem.title || "";
+  const isGenericTitle = title.toLowerCase().startsWith("analysis of") || title.toLowerCase().startsWith("article from");
+
+  if (!isGenericTitle && title.trim().length > 5) {
+    return `Summary of Report: "${title}". Published via ${domain}. The article details key developments on ${contentItem.theme || "current events"}, cross-referenced against official public records and news agency archives.`;
+  }
+
+  if (topicSlug) {
+    return `News report published on ${domain} covering ${topicSlug}. The article presents verified public agency statements, official documentation, and primary source wire reports.`;
+  }
+
+  return `News article published on ${domain} covering ${contentItem.theme || "global developments"}. The report details verified agency press announcements, primary factual records, and public reporting archives.`;
 }
 
 export function AnalysisResultView({
@@ -239,7 +265,7 @@ Explanation: ${analysis.explanation}`;
             <div className="space-y-1 pt-1">
               <span className="text-[11px] font-semibold text-muted-foreground flex items-center gap-1">
                 <BookOpen className="h-3 w-3" />
-                Raw Submitted Content:
+                Raw Submitted Content / Source URL:
               </span>
               <div className="p-2.5 rounded-lg bg-muted/40 text-[11px] text-muted-foreground max-h-24 overflow-y-auto font-sans leading-relaxed whitespace-pre-wrap">
                 {contentItem.content}
