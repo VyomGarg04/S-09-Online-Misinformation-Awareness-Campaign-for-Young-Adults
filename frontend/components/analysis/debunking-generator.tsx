@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Share2, MessageSquare, Copy, Check, Sparkles, Send } from "lucide-react";
+import { Share2, MessageSquare, Copy, Check, Sparkles, Send, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ContentItem } from "@/types/content";
 import { AnalysisResponse } from "@/types/analysis";
+import { getArticleSummaryText } from "./analysis-result-view";
 
 interface DebunkingGeneratorProps {
   contentItem: ContentItem;
@@ -22,23 +23,29 @@ export function DebunkingGenerator({
   const [copied, setCopied] = useState(false);
 
   const score = Math.round(analysis.credibility_score);
+  const articleSummary = getArticleSummaryText(contentItem, analysis);
 
-  const whatsappText = `🛡️ *MediaShield Fact Check Alert*
-*Claim:* "${contentItem.title}"
-*Verdict:* ${analysis.fact_check_status} (Score: ${score}%)
+  const whatsappText = `🛡️ *MediaShield Fact Check & Summary Response*
+*Claim / Article:* "${contentItem.title}"
+*Source:* ${contentItem.source || contentItem.author || "Online Media"}
+*Verdict:* ${analysis.fact_check_status} (Credibility Rating: ${score}%)
 
-*Fact Summary:*
+📌 *Article & Claim Summary:*
+${articleSummary}
+
+🔍 *AI Fact Audit Breakdown:*
 ${analysis.explanation}
 
-Verified via MediaShield AI Credibility Engine. Cross-check claims before sharing!`;
+Verified via MediaShield AI Credibility Engine. Verify before sharing! 💡`;
 
-  const twitterText = `1/3 🛡️ FACT CHECK: "${contentItem.title}"
+  const twitterText = `1/3 🛡️ FACT CHECK & SUMMARY: "${contentItem.title}"
 
-Our AI Credibility Engine evaluated this claim. Verdict: ${analysis.fact_check_status} (Credibility Rating: ${score}%) #FactCheck #MediaShield
+📌 ARTICLE SUMMARY: ${articleSummary.slice(0, 180)}...
 
-2/3 KEY EVIDENCE: ${analysis.explanation.slice(0, 200)}...
+2/3 🔍 VERDICT: ${analysis.fact_check_status} (Rating: ${score}%)
+EVIDENCE AUDIT: ${analysis.explanation.slice(0, 160)}... #FactCheck #MediaShield
 
-3/3 Stay informed & verify before sharing online! 🔍`;
+3/3 💡 Check primary sources & stay informed online! 🔍`;
 
   const textToCopy = tab === "whatsapp" ? whatsappText : twitterText;
 
@@ -50,23 +57,36 @@ Our AI Credibility Engine evaluated this claim. Verdict: ${analysis.fact_check_s
 
   return (
     <div className="rounded-2xl border bg-card p-6 shadow-xs space-y-6">
-      <div className="flex items-center justify-between border-b pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-4">
         <div className="flex items-center gap-2">
-          <Share2 className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+          <div className="p-2 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
+            <Share2 className="h-5 w-5" />
+          </div>
           <div>
             <h3 className="text-base font-bold text-foreground">
               AI Social Debunking Response Generator
             </h3>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Create shareable counter-fact replies and social cards to actively combat misinformation.
+              Create shareable counter-fact replies with embedded claim summaries to combat misinformation.
             </p>
           </div>
         </div>
 
-        <Badge className="bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 gap-1 text-xs">
+        <Badge className="bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 gap-1 text-xs self-start sm:self-auto">
           <Sparkles className="h-3.5 w-3.5" />
-          One-Click Debunk
+          One-Click Debunk Copy
         </Badge>
+      </div>
+
+      {/* Article Summary Box */}
+      <div className="p-3.5 rounded-xl bg-muted/40 border space-y-1 text-xs">
+        <span className="font-semibold text-foreground flex items-center gap-1.5">
+          <FileText className="h-3.5 w-3.5 text-amber-600" />
+          Integrated Article & Claim Summary:
+        </span>
+        <p className="text-muted-foreground leading-relaxed">
+          {articleSummary}
+        </p>
       </div>
 
       {/* Tabs */}
@@ -121,7 +141,7 @@ Our AI Credibility Engine evaluated this claim. Verdict: ${analysis.fact_check_s
           <div className="flex justify-end">
             <Button
               onClick={handleCopy}
-              className="bg-amber-700 hover:bg-amber-800 text-white dark:bg-amber-600 text-xs gap-1.5"
+              className="bg-amber-700 hover:bg-amber-800 text-white dark:bg-amber-600 text-xs gap-1.5 shadow-sm"
             >
               {copied ? (
                 <>
@@ -161,7 +181,11 @@ Our AI Credibility Engine evaluated this claim. Verdict: ${analysis.fact_check_s
             </div>
           </div>
 
-          <p className="text-xs text-amber-100/80 leading-relaxed line-clamp-3">
+          <div className="p-2.5 rounded-lg bg-white/10 text-[11px] text-amber-100/90 leading-relaxed line-clamp-2 border border-white/10">
+            <strong>Summary:</strong> {articleSummary}
+          </div>
+
+          <p className="text-xs text-amber-100/80 leading-relaxed line-clamp-2">
             {analysis.explanation}
           </p>
 
