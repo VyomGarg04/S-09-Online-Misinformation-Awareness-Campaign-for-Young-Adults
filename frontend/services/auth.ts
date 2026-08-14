@@ -20,7 +20,7 @@ export function login(data: LoginData) {
             "Content-Type":
                 "application/x-www-form-urlencoded",
         },
-        body,
+        body: body.toString(),
     });
 }
 

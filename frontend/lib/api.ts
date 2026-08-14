@@ -1,6 +1,12 @@
 import { getToken, removeToken } from "@/lib/auth";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+const getBaseUrl = (): string => {
+  let url = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+  // Strip trailing /api/v1 or /api/v1/ if present (since backend routes are mounted at root level like /auth, /content, /ai)
+  url = url.replace(/\/api\/v1\/?$/, "");
+  // Strip trailing slash
+  return url.replace(/\/$/, "");
+};
 
 export async function apiFetch<T>(
   endpoint: string,
@@ -9,8 +15,12 @@ export async function apiFetch<T>(
   const token = getToken();
   const headers = new Headers(options.headers);
 
-  // Only set JSON if the caller didn't specify a Content-Type
-  if (!(options.body instanceof FormData) && !headers.has("Content-Type")) {
+  // Only set JSON if the caller didn't specify a Content-Type or pass URLSearchParams/FormData
+  if (
+    !(options.body instanceof FormData) &&
+    !(options.body instanceof URLSearchParams) &&
+    !headers.has("Content-Type")
+  ) {
     headers.set("Content-Type", "application/json");
   }
 
@@ -18,14 +28,18 @@ export async function apiFetch<T>(
     headers.set("Authorization", `Bearer ${token}`);
   }
 
+  const baseUrl = getBaseUrl();
+  const normalizedEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  const targetUrl = `${baseUrl}${normalizedEndpoint}`;
+
   let response: Response;
   try {
-    response = await fetch(`${API_URL}${endpoint}`, {
+    response = await fetch(targetUrl, {
       ...options,
       headers,
     });
   } catch (err: any) {
-    console.error("Network fetch failed:", err);
+    console.error(`Network fetch failed for ${targetUrl}:`, err);
     throw new Error(
       "Network connection error. Unable to communicate with MediaShield backend. Please check backend server status."
     );

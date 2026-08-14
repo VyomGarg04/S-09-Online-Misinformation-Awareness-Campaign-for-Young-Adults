@@ -82,7 +82,7 @@ npm run lint
 Create a `.env.local` file in `frontend/`:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
 ---

@@ -78,7 +78,7 @@ media-shield/
 
 #### Frontend (`frontend/.env.local`):
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
 #### Backend (`backend/.env`):
