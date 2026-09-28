@@ -5,7 +5,7 @@ services:
     env: python
     plan: free
     region: oregon
-    buildCommand: "pip install -r backend/requirements.txt && alembic -c backend/alembic.ini upgrade head"
+    buildCommand: "pip install -r requirements.txt && alembic upgrade head"
     startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
     rootDir: backend
     envVars:
