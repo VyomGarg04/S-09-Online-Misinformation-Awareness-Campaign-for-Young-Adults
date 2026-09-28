@@ -1,0 +1,31 @@
+services:
+  # FastAPI Backend Service
+  - type: web
+    name: mediashield-backend
+    env: python
+    region: oregon
+    buildCommand: "pip install -r backend/requirements.txt && alembic -c backend/alembic.ini upgrade head"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    rootDir: backend
+    envVars:
+      - key: PROJECT_NAME
+        value: MediaShield
+      - key: API_V1_STR
+        value: /api/v1
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 11520
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mediashield-db
+          property: connectionString
+      - key: GEMINI_API_KEY
+        sync: false # Set in Render dashboard
+
+databases:
+  # Managed PostgreSQL Database
+  - name: mediashield-db
+    databaseName: mediashield
+    user: mediashield_user
+    region: oregon
