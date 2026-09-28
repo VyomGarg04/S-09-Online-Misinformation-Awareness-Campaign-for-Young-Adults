@@ -2,6 +2,8 @@
 
 > Next.js 16 Web Application for MediaShield — Digital Media Literacy & AI Fact-Checking Workspace.
 
+- 🌐 **Deployed URL**: [https://media-shield-phi.vercel.app/](https://media-shield-phi.vercel.app/)
+
 ---
 
 ## 🎨 Tech Stack & Architecture

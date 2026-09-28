@@ -2,6 +2,12 @@
 
 > **MediaShield** is a state-of-the-art digital media verification ecosystem designed to combat online misinformation. It equips users, researchers, and media professionals with AI-driven credibility scoring, live web URL article extraction, misinformation trend analytics, source reliability indexing, HTML5 Canvas forensic media inspection, and interactive literacy education.
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-media--shield--phi.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://media-shield-phi.vercel.app/)
+[![Backend API](https://img.shields.io/badge/FastAPI%20Docs-mediashield--backend-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://mediashield-backend-14nf.onrender.com/docs)
+
+- 🌐 **Live Web Application**: [https://media-shield-phi.vercel.app/](https://media-shield-phi.vercel.app/)
+- ⚙️ **Production API (Swagger Docs)**: [https://mediashield-backend-14nf.onrender.com/docs](https://mediashield-backend-14nf.onrender.com/docs)
+
 ---
 
 ## 🚀 Highlights & Key Features

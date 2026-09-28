@@ -23,6 +23,11 @@ export const metadata: Metadata = {
   title: "MediaShield — Think Critically. Verify Truth.",
   description:
     "AI-powered misinformation detection and media literacy platform for young adults. Analyze claims, verify sources, and combat online disinformation.",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
