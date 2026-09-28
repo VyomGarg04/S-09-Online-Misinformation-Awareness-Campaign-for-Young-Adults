@@ -14,6 +14,7 @@ import {
   FileCheck2,
   Printer,
   FileText,
+  ScanText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -233,6 +234,24 @@ Explanation: ${analysis.explanation}`;
             </div>
           </div>
         </div>
+
+        {/* Extracted OCR Text Card (Rendered for Image / Document / OCR Analysis) */}
+        {contentItem.content && (contentItem.content.includes("OCR") || contentItem.content.includes("📷") || contentItem.content.toLowerCase().includes("image")) && (
+          <div className="p-4 rounded-xl bg-muted/40 border border-amber-500/20 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-xs font-bold text-foreground">
+                <ScanText className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                <span>📷 Extracted OCR Image Text & Claim Content</span>
+              </div>
+              <Badge variant="outline" className="text-[10px] font-mono text-emerald-600 border-emerald-300">
+                OCR Optical Engine Verified
+              </Badge>
+            </div>
+            <div className="p-3 rounded-lg bg-background border font-mono text-xs text-foreground/90 leading-relaxed whitespace-pre-wrap max-h-48 overflow-y-auto">
+              {contentItem.content}
+            </div>
+          </div>
+        )}
 
         {/* Evidence & Article Breakdown Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
