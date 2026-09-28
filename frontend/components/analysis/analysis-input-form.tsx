@@ -409,6 +409,7 @@ export function AnalysisInputForm({
           {activeTab === "file" && (
             <div className="space-y-4">
               <input
+                id="media-file-input"
                 ref={fileInputRef}
                 type="file"
                 accept="image/*,.pdf,.doc,.docx,.txt"
@@ -423,8 +424,7 @@ export function AnalysisInputForm({
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                onClick={() => fileInputRef.current?.click()}
-                className={`group cursor-pointer border-2 border-dashed rounded-xl p-6 text-center transition-all ${
+                className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all ${
                   isDragging
                     ? "border-amber-500 bg-amber-500/10 scale-[1.01]"
                     : "border-muted-foreground/30 hover:border-amber-500/60 hover:bg-muted/30"
@@ -432,22 +432,19 @@ export function AnalysisInputForm({
               >
                 {uploadedPreview ? (
                   <div className="space-y-3">
-                    <div className="relative inline-block mx-auto max-h-40 rounded-lg overflow-hidden border border-border shadow-sm">
-                      <img src={uploadedPreview} alt="Uploaded media preview" className="max-h-36 object-contain" />
+                    <div className="relative inline-block mx-auto max-h-44 rounded-lg overflow-hidden border border-border shadow-sm">
+                      <img src={uploadedPreview} alt="Uploaded media preview" className="max-h-40 object-contain" />
                       <button
                         type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleClearFile();
-                        }}
-                        className="absolute top-1 right-1 p-1 rounded-full bg-black/70 text-white hover:bg-red-600 transition-colors"
+                        onClick={handleClearFile}
+                        className="absolute top-1.5 right-1.5 p-1 rounded-full bg-black/80 text-white hover:bg-red-600 transition-colors shadow-sm"
                       >
-                        <X className="h-3.5 w-3.5" />
+                        <X className="h-4 w-4" />
                       </button>
                     </div>
                     <div className="flex items-center justify-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
                       <FileCheck className="h-4 w-4" />
-                      <span>{uploadedFile?.name} ready for AI analysis</span>
+                      <span>{uploadedFile?.name} attached & ready for analysis</span>
                     </div>
                   </div>
                 ) : uploadedFile ? (
@@ -462,39 +459,46 @@ export function AnalysisInputForm({
                       variant="ghost"
                       size="sm"
                       className="text-xs text-red-500 hover:text-red-600 hover:bg-red-500/10"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleClearFile();
-                      }}
+                      onClick={handleClearFile}
                     >
                       Remove File
                     </Button>
                   </div>
                 ) : (
-                  <>
-                    <Upload className="mx-auto h-8 w-8 text-amber-600 dark:text-amber-400 mb-2 group-hover:scale-110 transition-transform" />
-                    <p className="text-sm font-semibold text-foreground">
-                      {isDragging ? "Drop your file here..." : "Click or Drag & Drop screenshot or document here"}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Supports PNG, JPG, WEBP, PDF up to 10MB. AI OCR will extract text automatically.
-                    </p>
-                    <div className="pt-2 flex justify-center gap-2">
+                  <div className="space-y-3">
+                    <Upload className="mx-auto h-9 w-9 text-amber-600 dark:text-amber-400 mb-1" />
+                    <div>
+                      <p className="text-sm font-bold text-foreground">
+                        {isDragging ? "Drop your file here..." : "Drag & drop image or screenshot here"}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        Supports PNG, JPG, WEBP, PDF up to 10MB
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+                      <label
+                        htmlFor="media-file-input"
+                        className="cursor-pointer inline-flex items-center justify-center rounded-lg bg-amber-700 hover:bg-amber-800 dark:bg-amber-600 dark:hover:bg-amber-700 text-white px-4 py-2 text-xs font-semibold gap-2 transition-colors shadow-sm"
+                      >
+                        <Upload className="h-3.5 w-3.5" />
+                        <span>Browse Files from Computer</span>
+                      </label>
+
                       <Button
                         type="button"
                         variant="outline"
                         size="sm"
-                        className="text-xs"
-                        onClick={(e) => {
-                          e.stopPropagation();
+                        className="text-xs text-muted-foreground"
+                        onClick={() => {
                           setTitle("Screenshot claim verification");
                           setContent("Extracted OCR text: Breaking news report shared on messaging group claiming unverified health miracle remedy.");
                         }}
                       >
-                        Use Sample OCR Screenshot Text
+                        Use Sample Text
                       </Button>
                     </div>
-                  </>
+                  </div>
                 )}
               </div>
 
