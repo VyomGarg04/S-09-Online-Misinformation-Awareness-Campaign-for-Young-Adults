@@ -140,6 +140,8 @@ export function DeepfakeInspector() {
     };
   }, [activeImageSrc, mode, selectedImageIndex, customImage]);
 
+  const [isDragging, setIsDragging] = useState(false);
+
   const handleRunScan = () => {
     setIsScanning(true);
     setTimeout(() => {
@@ -150,6 +152,35 @@ export function DeepfakeInspector() {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        if (evt.target?.result) {
+          setCustomImage(evt.target.result as string);
+          handleRunScan();
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDropImage = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = (evt) => {
         if (evt.target?.result) {
@@ -346,7 +377,12 @@ export function DeepfakeInspector() {
           <div
             onMouseMove={handleMouseMove}
             onMouseLeave={() => setMousePos(null)}
-            className="relative aspect-video rounded-2xl border bg-black overflow-hidden group cursor-crosshair shadow-md"
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDropImage}
+            className={`relative aspect-video rounded-2xl border bg-black overflow-hidden group cursor-crosshair shadow-md transition-all ${
+              isDragging ? "ring-4 ring-amber-500 scale-[1.01]" : ""
+            }`}
           >
             {/* Hidden Canvas for Pixel Math */}
             <canvas ref={canvasRef} className="hidden" />
