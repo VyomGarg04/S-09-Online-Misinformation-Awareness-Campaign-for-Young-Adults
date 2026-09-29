@@ -4,22 +4,33 @@ from fastapi.testclient import TestClient
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
 
 from app.main import app
-
-from app.core.config import settings
-
+from app.database.base import Base
+from app.database.models.user import User  # noqa
+from app.database.models.content import Content  # noqa
 from app.dependencies.database import get_db
 
+SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
 
-
-engine = create_engine(settings.database_url)
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL,
+    connect_args={"check_same_thread": False},
+    poolclass=StaticPool,
+)
 
 TestingSessionLocal = sessionmaker(
     bind=engine,
     autoflush=False,
     autocommit=False,
 )
+
+@pytest.fixture(autouse=True)
+def setup_db():
+    Base.metadata.create_all(bind=engine)
+    yield
+    Base.metadata.drop_all(bind=engine)
 
 @pytest.fixture
 def connection():
@@ -51,3 +62,4 @@ def client(session):
         yield client
 
     app.dependency_overrides.clear()
+

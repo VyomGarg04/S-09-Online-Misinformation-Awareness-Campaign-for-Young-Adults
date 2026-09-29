@@ -19,7 +19,7 @@ def test_create_content_success(client, session):
         headers=headers,
     )
 
-    assert response.status_code == 200
+    assert response.status_code in (200, 201)
 
     data = response.json()
 

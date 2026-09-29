@@ -37,10 +37,7 @@ def register_user(db: Session, user_data: UserCreate) -> User:
 def login_user(db: Session, user_data: UserLogin) -> Token:
     user = get_user_by_email(db, user_data.email)
 
-    if not user:
-        raise ValueError("Invalid email or password")
-    
-    if not verify_password(
+    if not user or not verify_password(
         user_data.password,
         user.hashed_password,
     ):

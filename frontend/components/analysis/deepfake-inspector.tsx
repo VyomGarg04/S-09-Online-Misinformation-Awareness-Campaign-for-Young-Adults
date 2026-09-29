@@ -123,19 +123,34 @@ export function DeepfakeInspector() {
         elaMeanDelta: parseFloat((avgNoise * 0.15).toFixed(2)),
       });
 
-      // If ELA mode, draw real pixel ELA error contrast overlay on canvas
+      // Render canvas based on selected inspection mode
       if (mode === "ela") {
         for (let i = 0; i < pixels.length; i += 4) {
           const r = pixels[i];
           const g = pixels[i + 1];
           const b = pixels[i + 2];
           // High contrast error difference map
-          const diff = Math.abs(r - g) * 2;
-          pixels[i] = diff;
-          pixels[i + 1] = Math.min(255, diff + 40);
-          pixels[i + 2] = Math.min(255, diff + 120);
+          const diff = Math.abs(r - g) * 2.5;
+          pixels[i] = Math.min(255, diff + 30);
+          pixels[i + 1] = Math.min(255, diff + 10);
+          pixels[i + 2] = Math.min(255, diff + 140);
         }
         ctx.putImageData(imgData, 0, 0);
+      } else if (mode === "heatmap") {
+        for (let i = 0; i < pixels.length; i += 4) {
+          const r = pixels[i];
+          const g = pixels[i + 1];
+          const b = pixels[i + 2];
+          const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+          // Thermal forensic heatmap overlay calculation
+          pixels[i] = Math.min(255, lum * 1.6 + 40);
+          pixels[i + 1] = Math.min(255, lum * 0.6);
+          pixels[i + 2] = Math.max(0, 220 - lum * 1.5);
+        }
+        ctx.putImageData(imgData, 0, 0);
+      } else {
+        // Original mode: render clean un-modified image
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       }
     };
   }, [activeImageSrc, mode, selectedImageIndex, customImage]);
@@ -384,17 +399,8 @@ export function DeepfakeInspector() {
               isDragging ? "ring-4 ring-amber-500 scale-[1.01]" : ""
             }`}
           >
-            {/* Hidden Canvas for Pixel Math */}
-            <canvas ref={canvasRef} className="hidden" />
-
-            {/* Base Image View */}
-            <img
-              src={activeImageSrc}
-              alt="Forensic Frame Source"
-              className={`w-full h-full object-cover transition-all duration-300 ${
-                mode === "ela" ? "filter contrast-200 brightness-75 grayscale" : ""
-              }`}
-            />
+            {/* Live HTML5 Pixel Inspection Canvas */}
+            <canvas ref={canvasRef} className="w-full h-full object-cover" />
 
             {/* Heatmap Overlay Simulation */}
             {mode === "heatmap" && (

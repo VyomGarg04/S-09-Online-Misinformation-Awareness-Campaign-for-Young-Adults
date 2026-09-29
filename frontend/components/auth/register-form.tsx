@@ -25,6 +25,7 @@ type FormData = z.infer<typeof schema>;
 export default function RegisterForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const {
     register: registerField,
@@ -37,15 +38,17 @@ export default function RegisterForm() {
   async function onSubmit(data: RegisterData) {
     try {
       setLoading(true);
+      setAuthError(null);
       await register(data);
       toast.success("Account created successfully! Please sign in.");
       router.push("/login");
     } catch (error) {
-      toast.error(
+      const message =
         error instanceof Error
           ? error.message
-          : "Registration failed. Please try again."
-      );
+          : "Registration failed. Please try again.";
+      setAuthError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -53,6 +56,12 @@ export default function RegisterForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {authError && (
+        <div className="p-3 rounded-md bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-medium flex items-start gap-2">
+          <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+          <div className="flex-1 leading-snug">{authError}</div>
+        </div>
+      )}
       <div className="space-y-1.5">
         <Label htmlFor="reg-name">Full Name</Label>
         <Input

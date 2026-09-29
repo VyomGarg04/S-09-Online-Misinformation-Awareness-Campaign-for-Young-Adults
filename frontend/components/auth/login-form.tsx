@@ -24,6 +24,7 @@ type FormData = z.infer<typeof schema>;
 export default function LoginForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const {
     register,
@@ -36,16 +37,18 @@ export default function LoginForm() {
   async function onSubmit(data: FormData) {
     try {
       setLoading(true);
+      setAuthError(null);
       const response = await login(data);
       saveToken(response.access_token);
       toast.success("Welcome back to MediaShield!");
       router.push("/dashboard");
     } catch (error) {
-      toast.error(
+      const message =
         error instanceof Error
           ? error.message
-          : "Login failed. Please check your credentials."
-      );
+          : "Login failed. Please check your credentials.";
+      setAuthError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -53,6 +56,13 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {authError && (
+        <div className="p-3 rounded-md bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-medium flex items-start gap-2">
+          <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+          <div className="flex-1 leading-snug">{authError}</div>
+        </div>
+      )}
+
       <div className="space-y-1.5">
         <Label htmlFor="login-email">Email Address</Label>
         <Input
@@ -60,7 +70,7 @@ export default function LoginForm() {
           type="email"
           placeholder="name@example.com"
           {...register("email")}
-          className={errors.email ? "border-destructive focus-visible:ring-destructive/20" : ""}
+          className={errors.email || authError ? "border-destructive focus-visible:ring-destructive/20" : ""}
         />
         {errors.email && (
           <p className="text-xs text-rose-500 font-medium flex items-center gap-1 mt-1">
@@ -79,7 +89,7 @@ export default function LoginForm() {
           type="password"
           placeholder="••••••••"
           {...register("password")}
-          className={errors.password ? "border-destructive focus-visible:ring-destructive/20" : ""}
+          className={errors.password || authError ? "border-destructive focus-visible:ring-destructive/20" : ""}
         />
         {errors.password && (
           <p className="text-xs text-rose-500 font-medium flex items-center gap-1 mt-1">
