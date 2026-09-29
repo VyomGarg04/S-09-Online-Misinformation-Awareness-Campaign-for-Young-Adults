@@ -29,6 +29,21 @@ tags_metadata = [
     },
 ]
 
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Ensure SQLite parent directory exists if using SQLite file storage
+    if settings.database_url.startswith("sqlite:///"):
+        db_path = settings.database_url.replace("sqlite:///", "")
+        db_dir = os.path.dirname(db_path)
+        if db_dir and not os.path.exists(db_dir):
+            try:
+                os.makedirs(db_dir, exist_ok=True)
+            except Exception:
+                pass
+    yield
+
 app = FastAPI(
     title="MediaShield API",
     version="1.0.0",
@@ -46,7 +61,9 @@ MediaShield is an AI-powered misinformation detection platform that helps users 
         "name": "MIT License",
     },
     openapi_tags=tags_metadata,
+    lifespan=lifespan,
 )
+
 
 # Dynamic CORS middleware configuration supporting local dev, Vercel deployments & custom origins
 cors_origins_env = os.getenv("CORS_ORIGINS", "")

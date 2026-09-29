@@ -8,16 +8,21 @@ services:
     buildCommand: "pip install -r requirements.txt && alembic upgrade head"
     startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
     rootDir: backend
+    disk:
+      name: sqlite_data
+      mountPath: /var/lib/data
+      sizeGB: 1
     envVars:
       - key: PROJECT_NAME
         value: MediaShield
       - key: API_V1_STR
         value: /api/v1
       - key: SECRET_KEY
-        generateValue: true
+        value: mediashield-production-stable-jwt-secret-key-2026-v1
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
         value: 11520
       - key: DATABASE_URL
-        value: sqlite:///./sql_app.db
+        value: sqlite:////var/lib/data/sql_app.db
       - key: GEMINI_API_KEY
         sync: false # Set in Render dashboard
+
